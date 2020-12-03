@@ -68,17 +68,45 @@ public class ProductController {
         return "index";
     }
 
-    //mapping naar shoppingcart pagina
+    //mapping naar winkelwagen pagina
     @GetMapping({"/winkelwagen"})
     public String getShoppingcart(ModelMap map){
         map.addAttribute("cart", winkelwagen);
+        Double totaalprijs = 0.0;
+        for (Product p: winkelwagen
+        ) {
+            totaalprijs += p.getPrijs();
+        }
+        map.addAttribute("totaalprijs", totaalprijs);
         return "winkelwagen";
     }
     @GetMapping({"/winkelwagen/{id}"})
     public String getDeleteShoppingcart(@PathVariable("id")int id, ModelMap map){
         winkelwagen.remove(id);
+        Double totaalprijs = 0.0;
+        for (Product p: winkelwagen
+        ) {
+            totaalprijs += p.getPrijs();
+        }
+        map.addAttribute("totaalprijs", totaalprijs);
         map.addAttribute("cart", winkelwagen);
+
         return "winkelwagen";
+    }
+    //mapping naar orderbevestiging pagina
+    @GetMapping({"/orderbevestiging"})
+    public String getOrderbevestiging(ModelMap map){
+        List<Product> aankoop = new ArrayList<>();
+        Double totaalprijs = 0.0;
+        for (Product p: winkelwagen
+             ) {
+            totaalprijs += p.getPrijs();
+            aankoop.add(p);
+        }
+        map.addAttribute("totaalprijs", totaalprijs);
+        map.addAttribute("cart", aankoop);
+        winkelwagen.clear();
+        return "orderbevestiging";
     }
 
     // mapping van de nieuwProduct pagina

@@ -25,9 +25,11 @@
             <td> <a th:href="'/winkelwagen/'+${productStat.index}">Verwijder</a>
         </tr>
     </table>
+    <p>totaalprijs : </p><p th:text="${totaalprijs}"/>
     <br>
-    <p>Bevestig aankoop</p>
-    // TO DO : get voor deze link die doorgeeft naar de orderbevestiging
+    // TODO: if cart is not empty: then show:
+    <a href="/orderbevestiging">Bevestig aankoop</a>
+
 
 
 </div>

@@ -12,20 +12,20 @@
     <!--    TO DO : internationalisatie!-->
     <h1>Orderbevestiging</h1>
     <br>
-
+    <p>Bedankt. Je aankoop werd gebevestigd.
+        Hieronder vind je het overzicht van je bestelling.</p>
     <table>
         <tr>
             <td>Item</td>
             <td>Prijs</td>
         </tr>
+
         <tr th:each="product: ${cart}">
             <td th:text="${product.naam}"></td>
             <td th:text="${product.prijs}"></td>
-<!--            <td> <a th:href="'/winkelwagen/'+${product.index}">Verwijder</a>-->
-
         </tr>
     </table>
-    <p>totaalprijs</p>
+    <p>totaalprijs : </p><p th:text="${totaalprijs}"/>
 
 
 </div>
