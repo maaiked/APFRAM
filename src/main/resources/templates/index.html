@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en"
+xmlns:th = "http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Dierenshop</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"></head>
+<body>
+<div th:insert="~{ navbar :: navbar }"></div>
+<div class="container">
+<!--    TO DO : internationalisatie!-->
+    <h1>Welkom op onze dierenshop</h1>
+    <br>
+    <p> Bekijk enkel de producten voor:</p>
+    <a class="btn btn-outline-secondary" href="/categorie/voeding">Voeding</a>
+    <a class="btn btn-outline-secondary" href="/categorie/habitat">Habitat</a>
+    <a class="btn btn-outline-secondary" href="/categorie/speelgoed">Speelgoed</a>
+    <a class="btn btn-outline-secondary" href="/categorie/verzorging">Verzorging</a>
+    <a class="btn btn-outline-secondary" href="/categorie/halsbanden">Halsbanden</a>
+    <a class="btn btn-outline-secondary" href="/dier/hond">Hond</a>
+    <a class="btn btn-outline-secondary" href="/dier/kat">Kat</a>
+    <a class="btn btn-outline-secondary" href="/dier/kip">Kip</a>
+    <a class="btn btn-outline-secondary" href="/dier/konijn">Konijn</a>
+    <a class="btn btn-outline-secondary" href="/dier/vis">Vis</a>
+    <a class="btn btn-outline-success" href="/index">Alles</a>
+    <br>
+    <a class="button" href="/winkelwagen">Bekijk winkelwagen</a>
+
+    <h1 th:text="${filter} ? 'Gefilterd op '+${filter} : ''"/></h1>
+
+<!--    TO DO: filter via een dropdown en geef deze door
+naar de controller die de productcollectie filtert-->
+
+    <div class="card" th:each="product: ${all}">
+        <div class="card-header" th:text="${product.naam}+' - prijs: '+${product.prijs}">
+        </div>
+        <div class="card-body">
+            <p class="card-text" th:text="${product.omschrijving}"></p>
+            <p class="card-text" th:text="'DIER: '+${product.dier}+'          CATEGORIE: '+${product.categorie} "></p>
+            <a th:href="'/'+${product.id}" class="btn btn-outline-primary">Toevoegen aan winkelwagen</a>
+           </div>
+    </div>
+
+
+</div>
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>
