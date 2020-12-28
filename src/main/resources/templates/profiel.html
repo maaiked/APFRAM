@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th = "http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Profiel</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"></head>
+<body>
+
+<div th:insert="~{ navbar :: navbar }"></div>
+
+<div class="container" style="min-height: 100vh">
+
+    Gegevens auth0:
+    <!--/*@thymesVar id="profile" type="model_user"*/-->
+    <h2 th:text="${authprofile.get('name')}"></h2>
+    <h2 th:text="${authprofile.get('email')}"></h2>
+    <h2 th:text="${authprofile.get('nickname')}"></h2>
+    <p th:text="${authprofile.get('sub')}"></p>
+    <p th:text="${authprofile.get('identities[user_id]')}"></p>
+    Gegevens userdatabase:
+    <p th:text="${userprofile.voornaam}"></p>
+    <p th:text="${userprofile.familienaam}"></p>
+    <p th:text="${userprofile.straat}"></p>
+    <p th:text="${userprofile.gemeente}"></p>
+
+    <div style="margin-bottom: 5px" th:each="orders: ${orders}">
+        <p th:text="${orders.id}"/>
+        <p th:text="${orders.totaalbedrag}"/>
+    </div>
+    <div style="margin-bottom: 5px" th:each="orderdetail: ${orderdetail}">
+        <p th:text="${orderdetail.detailid}"/>
+        <p th:text="${orderdetail.naam}"/>
+        <p th:text="${orderdetail.omschrijving}"/>
+    </div>
+
+
+</div>
+</body>
+</html>

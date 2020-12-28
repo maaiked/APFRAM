@@ -8,27 +8,41 @@
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"></head>
 <body>
 <div th:insert="~{ navbar :: navbar }"></div>
-<div class="container">
-    <!--    TO DO : internationalisatie!-->
+<div class="container" style="min-height: 100vh">
+    <!--   TODO : internationalisatie!
+    TODO : verzendadres toevoegen: zelfde als factuuradres of geef nieuw adres is
+    -->
     <h1>Orderbevestiging</h1>
     <br>
-    <p>Bedankt. Je aankoop werd gebevestigd.
-        Hieronder vind je het overzicht van je bestelling.</p>
-    <table>
-        <tr>
-            <td>Item</td>
-            <td>Prijs</td>
-        </tr>
+    <h4>Bedankt. Je aankoop werd bevestigd.
+        Hieronder vind je het overzicht van je bestelling.</h4>
 
-        <tr th:each="product: ${cart}">
-            <td th:text="${product.naam}"></td>
-            <td th:text="${product.prijs}"></td>
-        </tr>
-    </table>
-    <p>totaalprijs : </p><p th:text="${totaalprijs}"/>
-
+    <div class="row">
+        <div class="col-3">
+            <h5>Item</h5>
+        </div>
+        <div class="col-5">
+            <h5>Omschrijving</h5>
+        </div>
+        <div class="col-2">
+            <h5>Prijs</h5>
+        </div>
+    </div>
+    <div class="row" th:each="product: ${cart}">
+        <div class="col-3">
+            <p th:text="${product.naam}"/>
+        </div>
+        <div class="col-5">
+            <p th:text="${product.omschrijving}"/>
+        </div>
+        <div class="col-2">
+            <p th:text="'€ '+${product.prijs}"/>
+        </div>
+    </div>
+    <h6 th:text="'Totaalprijs : '+${totaalprijs}+' euro'"/>
 
 </div>
+<div th:insert="~{ footer :: footer }"></div>
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>

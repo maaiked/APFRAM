@@ -8,8 +8,9 @@
 </head>
 <body>
 <div th:insert="~{ navbar :: navbar }"></div>
-<div class="container">
-    <!--    TO DO : internationalisatie!-->
+<div class="container" style="min-height: 100vh">
+    <!--    TODO : internationalisatie!-->
+
 <h1>Voeg nieuw product toe</h1>
 <form method="post" th:action="@{~/nieuwProduct}" th:object="${nieuwProduct}">
     <div class="form-group">
@@ -21,14 +22,16 @@
     <div class="form-group">
         <label for="omschrijving" th:text="omschrijving"></label>
         <textarea class="form-control" id="omschrijving" cols="50" rows="5"  th:field="*{omschrijving}"></textarea>
-        <span th:if="${#fields.hasErrors('omschrijving')}" th:errors="*{omschrijving}"></span>
+
     </div><br>
     <div class="form-group">
         <label for="prijs" th:text="prijs"></label>
         <input class="form-control" id="prijs" type="text"  th:field="*{prijs}"></input>
-        <span th:if="${#fields.hasErrors('prijs')}" th:errors="*{prijs}"></span>
+        <span class="ui-state-error-text" th:if="${#fields.hasErrors('prijs')}" th:errors="*{prijs}"></span>
     </div>
     <br>
+
+    <!--TODO select dynamisch ophalen met thymeleaf! -->
     <div class="form-group">
         <label for="dier" th:text="dier"></label>
         <select class="form-control" id="dier" th:field="*{dier}">
@@ -38,7 +41,6 @@
             <option th:value="kip" th:text="kip"></option>
             <option th:value="konijn" th:text="konijn"></option>
         </select>
-        <span th:if="${#fields.hasErrors('dier')}" th:errors="*{dier}"></span>
     </div>
     <br>
     <div class="form-group">
@@ -49,14 +51,17 @@
             <option th:value="habitat" th:text="habitat"></option>
             <option th:value="verzorging" th:text="verzorging"></option>
             <option th:value="halsbanden" th:text="halsbanden"></option>
-        </select><span th:if="${#fields.hasErrors('categorie')}" th:errors="*{categorie}"></span>
+        </select>
     </div>
     <button type="submit" class="btn btn-primary">submit</button>
     <!--        <input type="submit">-->
     <!--        asterisk verwijst naar props van object (object is in header form)-->
 
 </form>
+
 </div>
+<div th:insert="~{ footer :: footer }"></div>
+
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>

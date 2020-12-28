@@ -2,6 +2,7 @@ package ehb.maaikedupont.opdrachtwerkstuk.entities;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -11,7 +12,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotNull(message="Naam mag niet leeg zijn")
+    @NotBlank(message="Naam mag niet leeg zijn")
     private String naam;
     @NotNull(message="Je moet een prijs opgeven")
     private Double prijs;
