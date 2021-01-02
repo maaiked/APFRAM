@@ -32,7 +32,7 @@ public class User {
     private String telefoonnummer;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Bestelling> bestellings = new ArrayList<>();
+    private List<Bestelling> orders = new ArrayList<>();
 
     public User(){
     };
@@ -118,10 +118,10 @@ public class User {
     }
 
     public List<Bestelling> getOrders() {
-        return bestellings;
+        return orders;
     }
 
-    public void setOrders(List<Bestelling> bestellings) {
-        this.bestellings = bestellings;
+    public void setOrders(List<Bestelling> orders) {
+        this.orders = orders;
     }
 }
