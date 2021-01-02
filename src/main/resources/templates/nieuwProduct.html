@@ -9,7 +9,6 @@
 <body>
 <div th:insert="~{ navbar :: navbar }"></div>
 <div class="container" style="min-height: 100vh">
-    <!--    TODO : internationalisatie!-->
 
 <h1>Voeg nieuw product toe</h1>
 <form method="post" th:action="@{~/nieuwProduct}" th:object="${nieuwProduct}">
@@ -31,26 +30,17 @@
     </div>
     <br>
 
-    <!--TODO select dynamisch ophalen met thymeleaf! -->
     <div class="form-group">
         <label for="dier" th:text="dier"></label>
         <select class="form-control" id="dier" th:field="*{dier}">
-            <option th:value="hond" th:text="hond"></option>
-            <option th:value="kat" th:text="kat"></option>
-            <option th:value="vis" th:text="vis"></option>
-            <option th:value="kip" th:text="kip"></option>
-            <option th:value="konijn" th:text="konijn"></option>
+            <option th:each="dier: ${dieren}" th:value="${dier}" th:text="${dier}"></option>
         </select>
     </div>
     <br>
     <div class="form-group">
         <label for="categorie" th:text="categorie"></label>
         <select class="form-control" id="categorie" th:field="*{categorie}">
-            <option th:value="speelgoed" th:text="speelgoed"></option>
-            <option th:value="voeding" th:text="voeding"></option>
-            <option th:value="habitat" th:text="habitat"></option>
-            <option th:value="verzorging" th:text="verzorging"></option>
-            <option th:value="halsbanden" th:text="halsbanden"></option>
+            <option th:each="categorie: ${categories}" th:value="${categorie}" th:text="${categorie}"></option>
         </select>
     </div>
     <button type="submit" class="btn btn-primary">submit</button>

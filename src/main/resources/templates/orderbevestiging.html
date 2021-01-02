@@ -9,26 +9,25 @@
 <body>
 <div th:insert="~{ navbar :: navbar }"></div>
 <div class="container" style="min-height: 100vh">
-    <!--   TODO : internationalisatie!
-    TODO : verzendadres toevoegen: zelfde als factuuradres of geef nieuw adres is
-    -->
-    <h1>Orderbevestiging</h1>
-    <br>
-    <h4>Bedankt. Je aankoop werd bevestigd.
-        Hieronder vind je het overzicht van je bestelling.</h4>
 
+
+    <h1 th:text="#{ob.orderbevestiging}"></h1>
+    <br>
+    <h4 th:text="#{ob.textbevestiging}"></h4>
+
+    <p th:text="#{ob.orderdatum} + ${#temporals.format(bestelling.datumAangemaakt, 'dd-MM-yyyy')}"></p>
     <div class="row">
         <div class="col-3">
             <h5>Item</h5>
         </div>
         <div class="col-5">
-            <h5>Omschrijving</h5>
+            <h5 th:text="#{ob.omschrijving}"></h5>
         </div>
         <div class="col-2">
-            <h5>Prijs</h5>
+            <h5 th:text="#{ob.prijs}"></h5>
         </div>
     </div>
-    <div class="row" th:each="product: ${cart}">
+    <div class="row" th:each="product: ${bestelling.orderDetails}">
         <div class="col-3">
             <p th:text="${product.naam}"/>
         </div>
@@ -39,7 +38,9 @@
             <p th:text="'€ '+${product.prijs}"/>
         </div>
     </div>
-    <h6 th:text="'Totaalprijs : '+${totaalprijs}+' euro'"/>
+    <h6 th:text="#{ob.totaalprijs}+${bestelling.totaalbedrag}+' euro'"/>
+    <span th:if="${bestelling.levering}" th:text="#{ob.huislevering}"></span>
+    <span th:unless="${bestelling.levering}" th:text="#{ob.ophalingwinkel}"></span>
 
 </div>
 <div th:insert="~{ footer :: footer }"></div>

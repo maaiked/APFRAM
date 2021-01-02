@@ -13,25 +13,26 @@
 
 <!-- PAGINA inhoud -->
 <div class="container" style="min-height: 100vh">
-    <!--    TODO : internationalisatie!-->
-    <h1>Jouw winkelwagen</h1>
+
+    <h1 th:text="#{ww.titel}"></h1>
     <br>
 
-    <!-- SHOW ALS winkelwagen leeg is -->
-    <span th:unless="${cart} != null">Je winkelwagen is leeg.</span>
+<!-- SHOW ALS winkelwagen leeg is -->
+    <span th:unless="${cart} != null" th:text="#{ww.leeg}"></span>
     <br>
 
-    <!-- SHOW ALS winkelwagen items bevat -->
+<!-- SHOW ALS winkelwagen items bevat -->
+    <!-- Winkelwagen items -->
     <span th:if="${cart} != null">
         <div class="row">
             <div class="col-3">
                 <h5>Item</h5>
             </div>
             <div class="col-5">
-                <h5>Omschrijving</h5>
+                <h5 th:text="#{ww.omschrijving}"></h5>
             </div>
             <div class="col-2">
-                <h5>Prijs</h5>
+                <h5 th:text="#{ww.prijs}"></h5>
             </div>
         </div>
         <div class="row" th:each="product: ${cart}">
@@ -45,16 +46,39 @@
                  <p th:text="'€ '+${product.prijs}"/>
             </div>
             <div class="col-2">
-                <a th:href="'/winkelwagen/'+${productStat.index}">Verwijder</a>
+                <a th:href="'/winkelwagen/'+${productStat.index}" th:text="#{ww.verwijder}"></a>
             </div>
         </div>
 
-        <h6 th:text="'Totaalprijs : '+${totaalprijs}+' euro'"/>
+        <!-- TODO rond totaalprijs af op twee cijfers na komma -->
+        <h6 th:text="#{ww.totaalprijs}+${totaalprijs}+' euro'"/>
         <br>
-        <a href="/orderbevestiging">Bevestig aankoop</a>
+
+        <!-- Leveringsopties -->
+        <h1>Check-out</h1>
+        <form method="post" th:action="@{~/orderbevestiging}">
+            <p th:text="#{ww.leveropties}"></p>
+            <div class="form-group">
+                <div class="form-check">
+                  <input class="form-check-input" name="leveroptie" type="radio" id="winkel" value="false" checked>
+                  <label class="form-check-label" for="winkel" th:text="#{ww.ophalen}">
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" name="leveroptie" type="radio" id="thuis" value="true">
+                  <label class="form-check-label" for="thuis" th:text="#{ww.thuislevering}">
+                  </label>
+                </div>
+            </div>
+
+            <!-- Bevestig knop -->
+            <button type="submit" class="btn btn-primary" th:text="#{ww.bevestig}"></button>
+        </form>
+
     </span>
 
 </div>
+<!-- FOOTER -->
 <div th:insert="~{ footer :: footer }"></div>
 
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>

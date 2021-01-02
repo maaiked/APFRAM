@@ -13,26 +13,26 @@
 
 <!-- PAGINA inhoud -->
 <div class="container" style="min-height: 100vh">
-    <!--    TODO : internationalisatie!
+    <!--
     ToDO: login knop maken in navbar
     TODO : toevoegen aan winkelwagen enkel wanneer ingelogd
     TODO : index pagina tonen ook wanneer men nog niet is ingelogd -->
 
-    <h1>Welkom op onze dierenshop</h1>
+    <h1 th:text="#{indexpagina.titel}"></h1>
     <br>
 
 <!-- FILTER KNOPPEN -->
-    <p> Bekijk enkel de producten voor:</p>
+    <p th:text="#{indexpagina.filtertekst}"/>
 
     <a class="btn btn-outline-secondary" th:each="categorie: ${categories}" th:href="'/categorie/'+${categorie}"
        th:text="${categorie}"></a>
     <a class="btn btn-outline-secondary" th:each="dier: ${dieren}" th:href="'/dier/'+${dier}" th:text="${dier}"></a>
-    <a class="btn btn-outline-success" href="/home">Alles</a>
+    <a class="btn btn-outline-success" href="/home" th:text="#{indexpagina.alles}"></a>
     <br>
 <!-- WINKELWAGEN KNOP -->
-    <a class="button" href="/winkelwagen">Bekijk winkelwagen</a>
+    <a class="button" href="/winkelwagen" th:text="#{indexpagina.winkelwagen}"></a>
 
-    <h5 th:text="${filter} ? 'Gefilterd op '+${filter} : ''"></h5>
+    <h5 th:text="${filter} ? #{indexpagina.filtered} +${filter} : ''"></h5>
 
 <!-- ARTIKELEN -->
     <div class="row">
@@ -42,7 +42,7 @@
                 </div>
                 <div class="card-body">
                     <p class="card-text" th:text="${product.omschrijving}"></p>
-                    <a th:href="'/'+${product.id}" class="btn btn-outline-primary">Toevoegen aan winkelwagen</a>
+                    <a th:href="'/'+${product.id}" class="btn btn-outline-primary" th:text="#{indexpagina.toevoegenwinkelwagen}"></a>
                 </div>
                 <div class="card-footer">
                     <small class="text-muted" th:text="'DIER: '+${product.dier}+' - CATEGORIE: '+${product.categorie} "></small>
