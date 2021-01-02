@@ -32,7 +32,7 @@
 
     <div style="margin-bottom: 5px" th:each="orders: ${userprofile.orders}">
         <div class="card">
-            <div class="card-header" th:text="'Bestelling referentie '+${orders.id}+ #{profiel.totaal}+${orders.totaalbedrag}">
+            <div class="card-header" th:text="'Bestelling referentie '+${orders.id}+ #{profiel.totaal}+${#numbers.formatDecimal(orders.totaalbedrag, 1, 2)}">
             </div>
             <div class="card-body" >
                 <p th:each="detail: ${orders.orderDetails}" class="card-text" th:text="${detail.naam}+' ~ € '+${detail.prijs}"></p>

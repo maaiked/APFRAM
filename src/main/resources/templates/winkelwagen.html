@@ -50,8 +50,7 @@
             </div>
         </div>
 
-        <!-- TODO rond totaalprijs af op twee cijfers na komma -->
-        <h6 th:text="#{ww.totaalprijs}+${totaalprijs}+' euro'"/>
+        <h6 th:text="#{ww.totaalprijs}+${#numbers.formatDecimal(totaalprijs, 1, 2)}+' euro'"/>
         <br>
 
         <!-- Leveringsopties -->
