@@ -1,6 +1,7 @@
 package ehb.maaikedupont.opdrachtwerkstuk.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class OrderDetail {
@@ -25,6 +26,9 @@ public class OrderDetail {
         this.naam = naam;
         this.omschrijving = omschrijving;
         this.prijs = prijs;
+        List<OrderDetail> orderdetails = bestelling.getOrderDetails();
+        orderdetails.add(this);
+        bestelling.setOrderDetails(orderdetails);
     }
 
     public int getDetailid() {

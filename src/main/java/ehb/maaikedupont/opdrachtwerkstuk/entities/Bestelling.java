@@ -19,24 +19,27 @@ public class Bestelling {
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
     private LocalDateTime datumAangemaakt;
-    private String straat;
-    private String nummer;
-    private String bus;
-    private String postcode;
-    private String gemeente;
+    private Boolean levering;
     private Double totaalbedrag;
 
     public Bestelling() {    }
 
-    public Bestelling(String straat, String nummer, String bus, String postcode, String gemeente, Double totaalbedrag, User user) {
+    public Bestelling(Boolean levering, Double totaalbedrag, User user) {
         this.datumAangemaakt = LocalDateTime.now();
-        this.straat = straat;
-        this.nummer = nummer;
-        this.bus = bus;
-        this.postcode = postcode;
-        this.gemeente = gemeente;
+        this.levering = levering;
         this.totaalbedrag = totaalbedrag;
         this.user = user;
+        List<Bestelling> bestellings = user.getOrders();
+        bestellings.add(this);
+        user.setOrders(bestellings);
+    }
+
+    public Boolean getLevering() {
+        return levering;
+    }
+
+    public void setLevering(Boolean levering) {
+        this.levering = levering;
     }
 
     public int getId() {
@@ -69,46 +72,6 @@ public class Bestelling {
 
     public void setDatumAangemaakt(LocalDateTime datumAangemaakt) {
         this.datumAangemaakt = datumAangemaakt;
-    }
-
-    public String getStraat() {
-        return straat;
-    }
-
-    public void setStraat(String straat) {
-        this.straat = straat;
-    }
-
-    public String getNummer() {
-        return nummer;
-    }
-
-    public void setNummer(String nummer) {
-        this.nummer = nummer;
-    }
-
-    public String getBus() {
-        return bus;
-    }
-
-    public void setBus(String bus) {
-        this.bus = bus;
-    }
-
-    public String getPostcode() {
-        return postcode;
-    }
-
-    public void setPostcode(String postcode) {
-        this.postcode = postcode;
-    }
-
-    public String getGemeente() {
-        return gemeente;
-    }
-
-    public void setGemeente(String gemeente) {
-        this.gemeente = gemeente;
     }
 
     public Double getTotaalbedrag() {
