@@ -5,7 +5,6 @@ import ehb.maaikedupont.opdrachtwerkstuk.dao.OrderDetailDAO;
 import ehb.maaikedupont.opdrachtwerkstuk.dao.ProductDAO;
 import ehb.maaikedupont.opdrachtwerkstuk.dao.UserDAO;
 import ehb.maaikedupont.opdrachtwerkstuk.entities.*;
-import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
@@ -31,12 +30,13 @@ public class ProductController {
     private final OrderDetailDAO orderDetailDAO;
     private final UserDAO userDAO;
 
-    // TO DO : winkelwagen niet globaal aanmaken maar een attribuut maken van user
+    // TODO : winkelwagen niet globaal aanmaken maar een attribuut maken van user
     // of in een sessievariabele?
-    private final List<Product> winkelwagen = new ArrayList<Product>();
+    private  List<Product> winkelwagen = new ArrayList<Product>();
     private Iterable<Product> productList ;
     private String filter;
     private Optional<User> user;
+
 
     @Autowired
     public ProductController(UserDAO userDAO,ProductDAO productDAO, BestellingDAO bestellingDAO, OrderDetailDAO orderDetailDAO)
@@ -65,9 +65,7 @@ public class ProductController {
         filter = null;
         map.addAttribute("profile", principal.getClaims());
         mapAll(map);
-
         // check if user is instantiated in local database
-
 
         return "index";
     }
@@ -98,24 +96,23 @@ public class ProductController {
         {
             winkelwagen.add(product.get());
         }
-//        TODO ; else return error message to page
+
         mapAll(map);
         return "index";
     }
 
     /* --- OPHALEN winkelwagenpagina ---  */
     @GetMapping({"/winkelwagen"})
-    public String getShoppingcart(ModelMap map){
-        if (!winkelwagen.isEmpty())
-        {
-            map.addAttribute("cart", winkelwagen);
+    public String getShoppingcart(ModelMap map, HttpServletRequest request){
+        if (!winkelwagen.isEmpty()) {
             Double totaalprijs = 0.0;
-            for (Product p: winkelwagen
+            for (Product p : winkelwagen
             ) {
                 totaalprijs += p.getPrijs();
             }
             map.addAttribute("totaalprijs", totaalprijs);
         }
+        map.addAttribute("cart", winkelwagen);
 
         return "winkelwagen";
     }
