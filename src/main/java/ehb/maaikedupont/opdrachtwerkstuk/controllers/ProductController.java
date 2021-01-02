@@ -5,16 +5,23 @@ import ehb.maaikedupont.opdrachtwerkstuk.dao.OrderDetailDAO;
 import ehb.maaikedupont.opdrachtwerkstuk.dao.ProductDAO;
 import ehb.maaikedupont.opdrachtwerkstuk.dao.UserDAO;
 import ehb.maaikedupont.opdrachtwerkstuk.entities.*;
+import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.swing.*;
 import javax.validation.Valid;
 import java.util.*;
+
 
 @Controller
 public class ProductController {
@@ -23,11 +30,13 @@ public class ProductController {
     private final BestellingDAO bestellingDAO;
     private final OrderDetailDAO orderDetailDAO;
     private final UserDAO userDAO;
+
     // TO DO : winkelwagen niet globaal aanmaken maar een attribuut maken van user
     // of in een sessievariabele?
     private final List<Product> winkelwagen = new ArrayList<Product>();
     private Iterable<Product> productList ;
     private String filter;
+    private Optional<User> user;
 
     @Autowired
     public ProductController(UserDAO userDAO,ProductDAO productDAO, BestellingDAO bestellingDAO, OrderDetailDAO orderDetailDAO)
@@ -49,7 +58,6 @@ public class ProductController {
         map.addAttribute("categories", Categorie.values());
     }
 
-
     /* --- OPHALEN indexpagina ---  */
     @GetMapping({"/", "/home"})
     public String getIndex(ModelMap map, @AuthenticationPrincipal OidcUser principal){
@@ -57,6 +65,10 @@ public class ProductController {
         filter = null;
         map.addAttribute("profile", principal.getClaims());
         mapAll(map);
+
+        // check if user is instantiated in local database
+
+
         return "index";
     }
 
@@ -86,7 +98,7 @@ public class ProductController {
         {
             winkelwagen.add(product.get());
         }
-//        TO DO ; else return error message to page
+//        TODO ; else return error message to page
         mapAll(map);
         return "index";
     }
@@ -104,6 +116,7 @@ public class ProductController {
             }
             map.addAttribute("totaalprijs", totaalprijs);
         }
+
         return "winkelwagen";
     }
 
@@ -130,48 +143,44 @@ public class ProductController {
     @ModelAttribute("nieuweOrderDetail")
     public OrderDetail toSaveOrderDetail(){ return new OrderDetail(); }
 
-    /* --- OPHALEN orderbevestigingspagina ---  */
-    @GetMapping({"/orderbevestiging"})
-    public String getOrderbevestiging(ModelMap map){
-        /* inhoud van winkelwagen array wordt overgezet naar andere array
-        * omdat na het bevestigen van de aankoop de winkelwagen gecleared wordt.
-        * Maar ik wel graag het overzicht van de aangekochte producten wil weergeven op
-        * de bevestigingspagina. */
-        List<Product> aankoop = new ArrayList<>();
-        Double totaalprijs = 0.0;
-        for (Product p: winkelwagen
-             ) {
-            totaalprijs += p.getPrijs();
-            aankoop.add(p);
-        }
-        map.addAttribute("totaalprijs", totaalprijs);
-        map.addAttribute("cart", aankoop);
-        winkelwagen.clear();
-        // leveradres vragen
-        // bestelling wegschrijven naar database
-        // public Bestelling(String straat, String nummer, String bus, String postcode,
-        // String gemeente, Double totaalbedrag, User user) {
-        //
+    /* --- POSTEN bevestigen aankoop ---  */
+    @PostMapping({"/orderbevestiging"})
+    public String postOrderbevestiging(HttpServletRequest request, @RequestParam("leveroptie") Boolean leveroptie){
+
         Optional<User> nieuweUser = userDAO.findById("1");
         if (nieuweUser.isPresent())
         {
-            Bestelling bestelling = new Bestelling("straat", "5", "", "7690", "gemeente", totaalprijs, nieuweUser.get());
-            bestellingDAO.save(bestelling);
-            for (Product p: aankoop
+            Double totaalprijs = 0.0;
+            for (Product p: winkelwagen
             ) {
-                //public OrderDetail(Bestelling bestelling, String naam,
-                // String omschrijvin, Double prijs)
+                totaalprijs += p.getPrijs();
+            }
+            Bestelling bestelling = new Bestelling(leveroptie, totaalprijs, nieuweUser.get());
+            bestellingDAO.save(bestelling);
+            for (Product p: winkelwagen
+            ) {
                 OrderDetail orderDetail = new OrderDetail(bestelling, p.getNaam(), p.getOmschrijving(), p.getPrijs());
                 orderDetailDAO.save(orderDetail);
             }
+            winkelwagen.clear();
+            request.setAttribute("bestelling", bestelling);
         }
+        return "orderbevestiging";
+    }
 
+    /* --- OPHALEN orderbevestigingspagina ---  */
+    @GetMapping({"/orderbevestiging"})
+    public String getOrderbevestiging(ModelMap map, HttpServletRequest request){
+        String bestelling = (String) request.getAttribute("bestelling");
+        map.addAttribute("bestelling", bestelling);
         return "orderbevestiging";
     }
 
     /* --- OPHALEN nieuwProductpagina ---  */
     @GetMapping({"/nieuwProduct"})
-    public String getNieuwProduct(){
+    public String getNieuwProduct(ModelMap map){
+        map.addAttribute("dieren", Dier.values());
+        map.addAttribute("categories", Categorie.values());
         return "nieuwProduct";
     }
 

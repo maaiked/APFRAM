@@ -25,9 +25,6 @@ public class ProfielController {
     private final UserDAO userDAO;
     private final BestellingDAO bestellingDAO;
     private final OrderDetailDAO orderDetailDAO;
-    // TO DO : winkelwagen niet globaal aanmaken maar een attribuut maken van user
-    // of in een sessievariabele?
-    private final List<Product> winkelwagen = new ArrayList<Product>();
 
     @Autowired
     public ProfielController(UserDAO userDAO, BestellingDAO bestellingDAO, OrderDetailDAO orderDetailDAO)
@@ -48,10 +45,10 @@ public class ProfielController {
         else map.addAttribute("userprofile", "geen user gevonden met deze id");
 
         // get orders
-        Iterable<Bestelling> bestelling = bestellingDAO.findAll();
+/*        Iterable<Bestelling> bestelling = bestellingDAO.findAll();
         Iterable<OrderDetail> orderDetail = orderDetailDAO.findAll();
         map.addAttribute("orders", bestelling);
-        map.addAttribute("orderdetail", orderDetail);
+        map.addAttribute("orderdetail", orderDetail);*/
         return "profiel";
     }
 }
