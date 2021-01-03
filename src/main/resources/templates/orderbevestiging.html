@@ -4,30 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Winkelwagen</title>
+    <title>Orderbevestiging</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
+
 <body>
 <div th:insert="~{ navbar :: navbar }"></div>
 <div class="container" style="min-height: 100vh">
 
-
-    <h1 th:text="#{ob.orderbevestiging}"></h1>
+    <h1 th:text="#{ob.orderbevestiging}">
+        <!-- T: Orderbevestiging -->
+    </h1>
     <br>
-    <h4 th:text="#{ob.textbevestiging}"></h4>
+    <h4 th:text="#{ob.textbevestiging}">
+       <!-- T: Bedankt. Je aankoop werd bevestigd.
+        Hieronder vind je het overzicht van je bestelling.-->
+    </h4>
 
-    <p th:text="#{ob.orderdatum} + ${#temporals.format(bestelling.datumAangemaakt, 'dd-MM-yyyy')}"></p>
+    <p th:text="#{ob.orderdatum} + ${#temporals.format(bestelling.datumAangemaakt, 'dd-MM-yyyy')}">
+        <!-- T: Besteld op : 01-01-2020 -->
+    </p>
+
     <div class="row">
         <div class="col-3">
             <h5>Item</h5>
         </div>
         <div class="col-5">
-            <h5 th:text="#{ob.omschrijving}"></h5>
+            <h5 th:text="#{ob.omschrijving}">
+                <!-- T: Omschrijving -->
+            </h5>
         </div>
         <div class="col-2">
-            <h5 th:text="#{ob.prijs}"></h5>
+            <h5 th:text="#{ob.prijs}">
+                <!-- T: Prijs -->
+            </h5>
         </div>
     </div>
+
+    <!-- Voor elk besteld product, maak een row aan met de details -->
     <div class="row" th:each="product: ${bestelling.orderDetails}">
         <div class="col-3">
             <p th:text="${product.naam}"/>
@@ -40,9 +54,15 @@
         </div>
     </div>
 
-    <h6 th:text="#{ob.totaalprijs}+${#numbers.formatDecimal(bestelling.totaalbedrag, 1, 2)}+' euro'"/>
-    <span th:if="${bestelling.levering}" th:text="#{ob.huislevering}"></span>
-    <span th:unless="${bestelling.levering}" th:text="#{ob.ophalingwinkel}"></span>
+    <h6 th:text="#{ob.totaalprijs}+${#numbers.formatDecimal(bestelling.totaalbedrag, 1, 2)}+' euro'">
+        <!-- T: Totaalprijs: 5,44 euro -->
+    </h6>
+    <span th:if="${bestelling.levering}" th:text="#{ob.huislevering}">
+        <!-- T: Je bestelling wordt aan huis geleverd -->
+    </span>
+    <span th:unless="${bestelling.levering}" th:text="#{ob.ophalingwinkel}">
+       <!-- T: Je bestelling kan opgehaald worden in de winkel -->
+    </span>
 
 </div>
 <div th:insert="~{ footer :: footer }"></div>
