@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Dierenshop</title>
-    <base href="/">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 </head>
@@ -17,21 +16,37 @@
 <!-- PAGINA inhoud -->
 <div class="container" style="min-height: 100vh">
 
-<!-- FILTER KNOPPEN -->
-    <p th:text="#{indexpagina.filtertekst}"/>
+    <h1 th:text="#{indexpagina.titel}">
+        <!-- T: Welkom op onze dierenwebshop! -->
+    </h1>
+    <hr>
 
+<!-- FILTER KNOPPEN -->
+    <p th:text="#{indexpagina.filtertekst}">
+        <!-- T: Bekijk enkel de producten voor:  -->
+    </p>
+
+    <!-- Categorie knoppen -->
     <a class="btn btn-outline-secondary" th:each="categorie: ${categories}" th:href="'/categorie/'+${categorie}"
-       th:text="${categorie}"></a>
-    <a class="btn btn-outline-secondary" th:each="dier: ${dieren}" th:href="'/dier/'+${dier}" th:text="${dier}"></a>
+       th:text="${categorie}">
+    </a>
+    <!-- Dier knoppen -->
+    <a class="btn btn-outline-secondary" th:each="dier: ${dieren}" th:href="'/dier/'+${dier}" th:text="${dier}">
+    </a>
     <a class="btn btn-outline-success" href="/home" th:text="#{indexpagina.alles}"></a>
     <br>
 <!-- WINKELWAGEN KNOP -->
-    <a class="button" href="/winkelwagen" th:text="#{indexpagina.winkelwagen}"></a>
+    <a class="button" href="/winkelwagen" th:text="#{indexpagina.winkelwagen}">
+        <!-- T: Winkelwagen -->
+    </a>
 
-    <h5 th:text="${filter} ? #{indexpagina.filtered} +${filter} : ''"></h5>
+    <h5 th:text="${filter} ? #{indexpagina.filtered} +${filter} : ''">
+        <!-- T: Gefilterd op: filter -->
+    </h5>
 
 <!-- ARTIKELEN -->
     <div class="row">
+        <!-- Voor elk product: maak div met card aan -->
         <div class="col-4" style="margin-bottom: 5px" th:each="product: ${all}">
             <div class="card">
                 <div class="card-header" th:text="${product.naam}+' ~ €'+${product.prijs}">
@@ -44,7 +59,6 @@
                     <small class="text-muted" th:text="'DIER: '+${product.dier}+' - CATEGORIE: '+${product.categorie} "></small>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

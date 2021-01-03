@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Winkelwagen</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
 </head>
 <body>
 
@@ -17,11 +16,15 @@
 <!-- PAGINA inhoud -->
 <div class="container" style="min-height: 100vh">
 
-    <h1 th:text="#{ww.titel}"></h1>
+    <h1 th:text="#{ww.titel}">
+        <!-- T: Winkelwagen -->
+    </h1>
     <br>
 
 <!-- SHOW ALS winkelwagen leeg is -->
-    <span th:unless="${cart} != null" th:text="#{ww.leeg}"></span>
+    <span th:unless="${cart} != null" th:text="#{ww.leeg}">
+        <!-- T: Je winkelwagen is leeg. -->
+    </span>
     <br>
 
 <!-- SHOW ALS winkelwagen items bevat -->
@@ -29,13 +32,19 @@
     <span th:if="${cart} != null">
         <div class="row">
             <div class="col-3">
-                <h5>Item</h5>
+                <h5>
+                    Item
+                </h5>
             </div>
             <div class="col-5">
-                <h5 th:text="#{ww.omschrijving}"></h5>
+                <h5 th:text="#{ww.omschrijving}">
+                    <!-- T: Omschrijving -->
+                </h5>
             </div>
             <div class="col-2">
-                <h5 th:text="#{ww.prijs}"></h5>
+                <h5 th:text="#{ww.prijs}">
+                    <!-- T: Prijs -->
+                </h5>
             </div>
         </div>
         <div class="row" th:each="product: ${cart}">
@@ -49,36 +58,47 @@
                  <p th:text="'€ '+${product.prijs}"/>
             </div>
             <div class="col-2">
-                <a th:href="'/winkelwagen/delete/'+${productStat.index}" th:text="#{ww.verwijder}"></a>
+                <a th:href="'/winkelwagen/delete/'+${productStat.index}" th:text="#{ww.verwijder}">
+                    <!-- T: Verwijder uit winkelwagen -->
+                </a>
             </div>
         </div>
 
-        <h6 th:text="#{ww.totaalprijs}+${#numbers.formatDecimal(totaalprijs, 1, 2)}+' euro'"/>
+        <h6 th:text="#{ww.totaalprijs}+${#numbers.formatDecimal(totaalprijs, 1, 2)}+' euro'">
+            <!-- T: Totaalprijs: 5,55 euro -->
+        </h6>
         <br>
 
-        <!-- Leveringsopties -->
+        <!-- FORM Leveringsopties -->
         <h1>Check-out</h1>
-        <p sec:authorize="!isAuthenticated()">Log in om je bestelling af te ronden</p>
+        <p sec:authorize="!isAuthenticated()" th:text="#{ww.login}">
+            <!-- T: Log in om je bestelling af te ronden -->
+        </p>
         <a sec:authorize="!isAuthenticated()" th:href="@{/oauth2/authorization/auth0}" id="qsLoginBtn" class="btn btn-primary btn-margin">Login</a>
         <form sec:authorize="isAuthenticated()" method="post" th:action="@{~/orderbevestiging}" >
-            <p th:text="#{ww.leveropties}"></p>
+            <p th:text="#{ww.leveropties}">
+                <!-- T: Leveroptie:  -->
+            </p>
             <div class="form-group">
                 <div class="form-check">
                   <input class="form-check-input" name="leveroptie" type="radio" id="winkel" value="false" checked>
                   <label class="form-check-label" for="winkel" th:text="#{ww.ophalen}">
+                      <!-- T: ophalen in de winkel -->
                   </label>
                 </div>
                 <div class="form-check">
                   <input class="form-check-input" name="leveroptie" type="radio" id="thuis" value="true">
                   <label class="form-check-label" for="thuis" th:text="#{ww.thuislevering}">
+                      <!-- T: thuislevering -->
                   </label>
                 </div>
             </div>
 
-            <!-- Bevestig knop -->
-            <button type="submit" class="btn btn-primary" th:text="#{ww.bevestig}"></button>
+            <!-- BUTTON bevestig -->
+            <button type="submit" class="btn btn-primary" th:text="#{ww.bevestig}">
+                <!-- T: Bevestig aankoop -->
+            </button>
         </form>
-
     </span>
 
 </div>

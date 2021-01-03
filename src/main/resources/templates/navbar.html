@@ -1,27 +1,35 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light bg-light">
+
+    <!-- Button voor als scherm te klein is -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
+
     <a class="navbar-brand" >DIERENWEBSHOP</a>
 
     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <!-- show home link, login is niet nodig -->
             <li class="nav-item active">
                 <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
+            <!-- show winkelwagen link, login is niet nodig -->
             <li class="nav-item">
                 <a class="nav-link" href="/winkelwagen" th:text="#{navbar.winkelwagen}"></a>
             </li>
+            <!-- als user niet is ingelogd, show login knop -->
             <li sec:authorize="!isAuthenticated()" class="nav-item">
                 <a th:href="@{/oauth2/authorization/auth0}" id="qsLoginBtn" class="btn btn-primary btn-margin">Login</a>
             </li>
+            <!-- als user is ingelogd, show profiel link -->
             <li sec:authorize="isAuthenticated()" class="nav-item">
                 <a class="nav-link" href="/profiel" th:text="#{navbar.profiel}">
                     <i class="fas fa-user mr-3"></i>
                 </a>
             </li>
+            <!-- als user is ingelogd, show logout knop -->
             <li sec:authorize="isAuthenticated()" class="nav-item">
                 <a class="nav-link" id="qsLogoutBtn" th:href="@{/logout}">
                     <i class="fas fa-power-off mr-3"></i> Log out
