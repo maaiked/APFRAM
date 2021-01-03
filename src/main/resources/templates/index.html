@@ -5,7 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Dierenshop</title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"></head>
+    <base href="/">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
 <body>
 
 <!-- NAVBAR -->
@@ -35,7 +38,7 @@
                 </div>
                 <div class="card-body">
                     <p class="card-text" th:text="${product.omschrijving}"></p>
-                    <a th:href="'/'+${product.id}" class="btn btn-outline-primary" th:text="#{indexpagina.toevoegenwinkelwagen}"></a>
+                    <a th:href="'/winkelwagen/'+${product.id}" class="btn btn-outline-primary" th:text="#{indexpagina.toevoegenwinkelwagen}"></a>
                 </div>
                 <div class="card-footer">
                     <small class="text-muted" th:text="'DIER: '+${product.dier}+' - CATEGORIE: '+${product.categorie} "></small>
@@ -49,8 +52,6 @@
 <!-- FOOTER -->
 <div th:insert="~{ footer :: footer }"></div>
 
-<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
 </body>
 </html>

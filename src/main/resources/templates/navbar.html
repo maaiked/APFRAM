@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light bg-light">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -14,10 +14,21 @@
             <li class="nav-item">
                 <a class="nav-link" href="/winkelwagen" th:text="#{navbar.winkelwagen}"></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/profiel" th:text="#{navbar.profiel}"></a>
+            <li sec:authorize="!isAuthenticated()" class="nav-item">
+                <a th:href="@{/oauth2/authorization/auth0}" id="qsLoginBtn" class="btn btn-primary btn-margin">Login</a>
+            </li>
+            <li sec:authorize="isAuthenticated()" class="nav-item">
+                <a class="nav-link" href="/profiel" th:text="#{navbar.profiel}">
+                    <i class="fas fa-user mr-3"></i>
+                </a>
+            </li>
+            <li sec:authorize="isAuthenticated()" class="nav-item">
+                <a class="nav-link" id="qsLogoutBtn" th:href="@{/logout}">
+                    <i class="fas fa-power-off mr-3"></i> Log out
+                </a>
             </li>
         </ul>
+
     </div>
 </nav>
 </html>

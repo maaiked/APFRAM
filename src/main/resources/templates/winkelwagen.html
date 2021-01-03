@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th = "http://www.thymeleaf.org">
+      xmlns:th = "http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Winkelwagen</title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"></head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
 <body>
 
 <!-- NAVBAR -->
@@ -46,7 +49,7 @@
                  <p th:text="'€ '+${product.prijs}"/>
             </div>
             <div class="col-2">
-                <a th:href="'/winkelwagen/'+${productStat.index}" th:text="#{ww.verwijder}"></a>
+                <a th:href="'/winkelwagen/delete/'+${productStat.index}" th:text="#{ww.verwijder}"></a>
             </div>
         </div>
 
@@ -55,7 +58,9 @@
 
         <!-- Leveringsopties -->
         <h1>Check-out</h1>
-        <form method="post" th:action="@{~/orderbevestiging}">
+        <p sec:authorize="!isAuthenticated()">Log in om je bestelling af te ronden</p>
+        <a sec:authorize="!isAuthenticated()" th:href="@{/oauth2/authorization/auth0}" id="qsLoginBtn" class="btn btn-primary btn-margin">Login</a>
+        <form sec:authorize="isAuthenticated()" method="post" th:action="@{~/orderbevestiging}" >
             <p th:text="#{ww.leveropties}"></p>
             <div class="form-group">
                 <div class="form-check">
@@ -79,10 +84,6 @@
 </div>
 <!-- FOOTER -->
 <div th:insert="~{ footer :: footer }"></div>
-
-<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 
 </body>
 </html>

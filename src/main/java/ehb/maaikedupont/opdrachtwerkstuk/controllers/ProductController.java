@@ -7,10 +7,7 @@ import ehb.maaikedupont.opdrachtwerkstuk.dao.UserDAO;
 import ehb.maaikedupont.opdrachtwerkstuk.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.oidc.OidcIdToken;
-import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -30,8 +27,7 @@ public class ProductController {
     private final OrderDetailDAO orderDetailDAO;
     private final UserDAO userDAO;
 
-    // TODO : winkelwagen niet globaal aanmaken maar een attribuut maken van user
-    // of in een sessievariabele?
+    // TODO : winkelwagen niet globaal aanmaken maar een attribuut maken van user of sessievariabele?
     private  List<Product> winkelwagen = new ArrayList<Product>();
     private Iterable<Product> productList ;
     private String filter;
@@ -47,7 +43,6 @@ public class ProductController {
         this.userDAO = userDAO;
     }
 
-
     /* --- METHOD : herhalende code ---
     code die bij bijna elke mapping werd herhaald, dus functie van gemaakt dubbele code te vermijden
     */
@@ -58,15 +53,17 @@ public class ProductController {
         map.addAttribute("categories", Categorie.values());
     }
 
+/* --- INDEX ---  */
     /* --- OPHALEN indexpagina ---  */
     @GetMapping({"/", "/home"})
     public String getIndex(ModelMap map, @AuthenticationPrincipal OidcUser principal){
         productList= productDAO.findAll();
         filter = null;
-        map.addAttribute("profile", principal.getClaims());
         mapAll(map);
-        // check if user is instantiated in local database
-
+        if (principal != null) {
+            // check if user is instantiated in local database
+            // if not : create user en add userdetails?
+        }
         return "index";
     }
 
@@ -88,22 +85,22 @@ public class ProductController {
         return "index";
     }
 
+/* --- WINKELWAGEN ---  */
     /* --- TOEVOEGEN artikel aan Winkelwagen[] ---  */
-    @GetMapping({"/{id}"})
+    @GetMapping({"/winkelwagen/{id}"})
     public String getAddToShoppingcart(@PathVariable("id") int id, ModelMap map){
         Optional<Product> product = productDAO.findById(id);
         if (product.isPresent())
         {
             winkelwagen.add(product.get());
         }
-
         mapAll(map);
         return "index";
     }
 
     /* --- OPHALEN winkelwagenpagina ---  */
     @GetMapping({"/winkelwagen"})
-    public String getShoppingcart(ModelMap map, HttpServletRequest request){
+    public String getShoppingcart(ModelMap map){
         if (!winkelwagen.isEmpty()) {
             Double totaalprijs = 0.0;
             for (Product p : winkelwagen
@@ -111,14 +108,14 @@ public class ProductController {
                 totaalprijs += p.getPrijs();
             }
             map.addAttribute("totaalprijs", totaalprijs);
-        }
-        map.addAttribute("cart", winkelwagen);
+            map.addAttribute("cart", winkelwagen);
 
+        }
         return "winkelwagen";
     }
 
     /* --- VERWIJDEREN artikel van Winkelwagen[] ---  */
-    @GetMapping({"/winkelwagen/{id}"})
+    @GetMapping({"/winkelwagen/delete/{id}"})
     public String getDeleteShoppingcart(@PathVariable("id")int id, ModelMap map){
         winkelwagen.remove(id);
         Double totaalprijs = 0.0;
@@ -131,19 +128,14 @@ public class ProductController {
         return "winkelwagen";
     }
 
-    /* --- ATTRIBUUT die Bestelling entity aanmaakt om attributen naar te mappen ---  */
-    @ModelAttribute("nieuweBestelling")
-    public Bestelling toSaveBestelling(){
-        return new Bestelling();
-    }
-
-    @ModelAttribute("nieuweOrderDetail")
-    public OrderDetail toSaveOrderDetail(){ return new OrderDetail(); }
-
+/* --- ORDERBEVESTIGING ---  */
     /* --- POSTEN bevestigen aankoop ---  */
     @PostMapping({"/orderbevestiging"})
-    public String postOrderbevestiging(HttpServletRequest request, @RequestParam("leveroptie") Boolean leveroptie){
+    public String postOrderbevestiging(HttpServletRequest request,
+                                       @RequestParam("leveroptie") Boolean leveroptie,
+                                       @AuthenticationPrincipal OidcUser principal){
 
+        // find user by id of logged in user??
         Optional<User> nieuweUser = userDAO.findById("1");
         if (nieuweUser.isPresent())
         {
@@ -173,6 +165,7 @@ public class ProductController {
         return "orderbevestiging";
     }
 
+/* --- NIEUW PRODUCT ---  */
     /* --- OPHALEN nieuwProductpagina ---  */
     @GetMapping({"/nieuwProduct"})
     public String getNieuwProduct(ModelMap map){
