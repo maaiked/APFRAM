@@ -61,8 +61,7 @@ public class ProductController {
         filter = null;
         mapAll(map);
         if (principal != null) {
-            // check if user is instantiated in local database
-            // if not : create user en add userdetails?
+            // TODO:  check if user is instantiated in local database if not : create user en add userdetails?
         }
         return "index";
     }
@@ -135,7 +134,7 @@ public class ProductController {
                                        @RequestParam("leveroptie") Boolean leveroptie,
                                        @AuthenticationPrincipal OidcUser principal){
 
-        // find user by id of logged in user??
+        // TODO : find user by id of logged in user??
         Optional<User> nieuweUser = userDAO.findById("1");
         if (nieuweUser.isPresent())
         {
