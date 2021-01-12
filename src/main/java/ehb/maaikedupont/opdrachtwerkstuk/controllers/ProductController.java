@@ -56,16 +56,10 @@ public class ProductController {
 /* --- INDEX ---  */
     /* --- OPHALEN indexpagina ---  */
     @GetMapping({"/", "/home"})
-    public String getIndex(ModelMap map, @AuthenticationPrincipal OidcUser principal){
+    public String getIndex(ModelMap map){
         productList= productDAO.findAll();
         filter = null;
         mapAll(map);
-        if (principal != null) {
-            var princ = principal.getClaims();
-            var id = princ.get("sub").toString();
-            Optional<User> nieuweUser = userDAO.findById(id);
-            // TODO:  check if user is instantiated in local database if not : create user en add userdetails?
-        }
         return "index";
     }
 
@@ -111,7 +105,6 @@ public class ProductController {
             }
             map.addAttribute("totaalprijs", totaalprijs);
             map.addAttribute("cart", winkelwagen);
-
         }
         return "winkelwagen";
     }
@@ -137,26 +130,31 @@ public class ProductController {
                                        @RequestParam("leveroptie") Boolean leveroptie,
                                        @AuthenticationPrincipal OidcUser principal){
 
+
         var princ = principal.getClaims();
-        var id = princ.get("sub").toString();
-        Optional<User> nieuweUser = userDAO.findById(id);
-        if (nieuweUser.isPresent())
+        var auth_id = princ.get("sub").toString();
+        Optional<User> nieuweUser = userDAO.findById(auth_id);
+        if (!nieuweUser.isPresent())
         {
-            Double totaalprijs = 0.0;
-            for (Product p: winkelwagen
-            ) {
-                totaalprijs += p.getPrijs();
-            }
-            Bestelling bestelling = new Bestelling(leveroptie, totaalprijs, nieuweUser.get());
-            bestellingDAO.save(bestelling);
-            for (Product p: winkelwagen
-            ) {
-                OrderDetail orderDetail = new OrderDetail(bestelling, p.getNaam(), p.getOmschrijving(), p.getPrijs());
-                orderDetailDAO.save(orderDetail);
-            }
-            winkelwagen.clear();
-            request.setAttribute("bestelling", bestelling);
+            // TODO : gegevens nieuwe user ophalen via form ofzo??
+            User nieuw = new User(auth_id);
+            userDAO.save(nieuw);
+            nieuweUser = userDAO.findById(auth_id);
         }
+        Double totaalprijs = 0.0;
+        for (Product p: winkelwagen
+        ) {
+            totaalprijs += p.getPrijs();
+        }
+        Bestelling bestelling = new Bestelling(leveroptie, totaalprijs, nieuweUser.get());
+        bestellingDAO.save(bestelling);
+        for (Product p: winkelwagen
+        ) {
+            OrderDetail orderDetail = new OrderDetail(bestelling, p.getNaam(), p.getOmschrijving(), p.getPrijs());
+            orderDetailDAO.save(orderDetail);
+        }
+        winkelwagen.clear();
+        request.setAttribute("bestelling", bestelling);
         return "orderbevestiging";
     }
 

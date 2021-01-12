@@ -1,7 +1,6 @@
 package ehb.maaikedupont.opdrachtwerkstuk.entities;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,28 +8,24 @@ import java.util.List;
 public class User {
     @Id
     private String auth_id;
-    @NotNull(message="Je moet je familienaam opgeven")
     private String familienaam;
-    @NotNull(message="Je moet je voornaam opgeven")
     private String voornaam;
-    @NotNull(message="Je moet je mailadres opgeven")
     private String mail;
-    @NotNull(message="Je moet je straat opgeven")
     private String straat;
-    @NotNull(message="Je moet je huisnummer opgeven")
     private String huisnummer;
     private String bus;
-    @NotNull(message="Je moet je postcode opgeven")
     private String postcode;
-    @NotNull(message="Je moet je gemeente opgeven")
     private String gemeente;
-    @NotNull(message="Je moet je telefoonnummer opgeven")
     private String telefoonnummer;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Bestelling> orders = new ArrayList<>();
 
     public User(){
+    };
+
+    public User(String auth_id){
+        this.auth_id = auth_id;
     };
 
     public String getAuth_id() {

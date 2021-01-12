@@ -30,14 +30,12 @@ public class ProfielController {
         var id = princ.get("sub").toString();
         Optional<User> user = userDAO.findById(id);
         map.addAttribute("authprofile", principal.getClaims());
-
+        map.addAttribute("sub", id);
         if (user.isPresent())
         {
            map.addAttribute("userprofile", user.get());
-           map.addAttribute("sub", princ.get("sub").toString());
+           map.addAttribute("sub", id);
         }
-        else map.addAttribute("userprofile", "geen user gevonden met deze id");
-
         return "profiel";
     }
 }

@@ -23,25 +23,27 @@
     <p th:text="${sub}+ ' = SUB '"></p>
 
     <h2>Gegevens userdatabase:</h2>
-    <p th:text="${userprofile.auth_id}"></p>
-    <p th:text="${userprofile.familienaam}"></p>
-    <p th:text="${userprofile.straat}"></p>
-    <p th:text="${userprofile.gemeente}"></p>
-    <h2 th:text="#{profiel.bestellingen}"></h2>
+    <span th:if="${userprofile} != null">
+        <p th:text="${userprofile.auth_id}"></p>
+        <p th:text="${userprofile.familienaam}"></p>
+        <p th:text="${userprofile.straat}"></p>
+        <p th:text="${userprofile.gemeente}"></p>
+        <h2 th:text="#{profiel.bestellingen}"></h2>
 
-    <div style="margin-bottom: 5px" th:each="orders: ${userprofile.orders}">
-        <div class="card">
-            <div class="card-header" th:text="'Bestelling referentie '+${orders.id}+ #{profiel.totaal}+${#numbers.formatDecimal(orders.totaalbedrag, 1, 2)}">
-            </div>
-            <div class="card-body" >
-                <p th:each="detail: ${orders.orderDetails}" class="card-text" th:text="${detail.naam}+' ~ € '+${detail.prijs}"></p>
-            </div>
-            <div class="card-footer">
-                <small class="text-muted" th:text="#{profiel.besteldop}+${#temporals.format(orders.datumAangemaakt, 'dd-MM-yyyy')}+ #{profiel.leveroptie}+(${orders.levering}? #{profiel.thuislevering} : #{profiel.ophalenwinkel})"></small>
-            </div>
+        <div style="margin-bottom: 5px" th:each="orders: ${userprofile.orders}">
+            <div class="card">
+                <div class="card-header" th:text="'Bestelling referentie '+${orders.id}+ #{profiel.totaal}+${#numbers.formatDecimal(orders.totaalbedrag, 1, 2)}">
+                </div>
+                <div class="card-body" >
+                    <p th:each="detail: ${orders.orderDetails}" class="card-text" th:text="${detail.naam}+' ~ € '+${detail.prijs}"></p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted" th:text="#{profiel.besteldop}+${#temporals.format(orders.datumAangemaakt, 'dd-MM-yyyy')}+ #{profiel.leveroptie}+(${orders.levering}? #{profiel.thuislevering} : #{profiel.ophalenwinkel})"></small>
+                </div>
 
+            </div>
         </div>
-    </div>
+    </span>
 </div>
 </body>
 </html>
