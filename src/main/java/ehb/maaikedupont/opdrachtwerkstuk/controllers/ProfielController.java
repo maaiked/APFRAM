@@ -23,12 +23,18 @@ public class ProfielController {
 
     @GetMapping({"/profiel"})
     public String getProfiel(ModelMap map, @AuthenticationPrincipal OidcUser principal){
-        // TODO : get user in localdatabase op basis van ingelogde user...
-        Optional<User> user = userDAO.findById("1");
+
+        // get user in localdatabase op basis van ingelogde user...
+        // TODO: map attributen opruimen en profielpagina mooi maken :)
+        var princ = principal.getClaims();
+        var id = princ.get("sub").toString();
+        Optional<User> user = userDAO.findById(id);
         map.addAttribute("authprofile", principal.getClaims());
+
         if (user.isPresent())
         {
            map.addAttribute("userprofile", user.get());
+           map.addAttribute("sub", princ.get("sub").toString());
         }
         else map.addAttribute("userprofile", "geen user gevonden met deze id");
 

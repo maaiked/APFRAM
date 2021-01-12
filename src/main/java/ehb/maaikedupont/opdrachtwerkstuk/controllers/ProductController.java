@@ -61,6 +61,9 @@ public class ProductController {
         filter = null;
         mapAll(map);
         if (principal != null) {
+            var princ = principal.getClaims();
+            var id = princ.get("sub").toString();
+            Optional<User> nieuweUser = userDAO.findById(id);
             // TODO:  check if user is instantiated in local database if not : create user en add userdetails?
         }
         return "index";
@@ -134,8 +137,9 @@ public class ProductController {
                                        @RequestParam("leveroptie") Boolean leveroptie,
                                        @AuthenticationPrincipal OidcUser principal){
 
-        // TODO : find user by id of logged in user??
-        Optional<User> nieuweUser = userDAO.findById("1");
+        var princ = principal.getClaims();
+        var id = princ.get("sub").toString();
+        Optional<User> nieuweUser = userDAO.findById(id);
         if (nieuweUser.isPresent())
         {
             Double totaalprijs = 0.0;

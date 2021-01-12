@@ -20,7 +20,7 @@
     <p th:text="${authprofile.get('email')}"></p>
     <p th:text="${authprofile.get('nickname')}+' nick'"></p>
     <p th:text="${authprofile.get('sub')}+ 'sub'"></p>
-    <p th:text="${authprofile.get('identities[user_id]')}"></p>
+    <p th:text="${sub}+ ' = SUB '"></p>
 
     <h2>Gegevens userdatabase:</h2>
     <p th:text="${userprofile.auth_id}"></p>

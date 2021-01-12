@@ -5,10 +5,6 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-// TODO Linken van auth0 registratie met MySQL database... Post-register hook maken waarbij koppeling
-// met auth0 id gelegd wordt en waarna extra informatie gevraagd wordt.
 @Entity
 public class User {
     @Id
