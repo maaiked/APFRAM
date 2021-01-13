@@ -23,11 +23,19 @@ public class User {
     // een user kan meerdere bestellingen hebben
     private List<Bestelling> orders = new ArrayList<>();
 
-    public User() {
-    }
+    public User(){}
 
-    public User(String auth_id) {
+    public User(String auth_id, String naam, String voornaam, String email, String tel, String straat, String huisnummer, String bus, String postcode, String gemeente) {
         this.auth_id = auth_id;
+        this.familienaam = naam;
+        this.voornaam = voornaam;
+        this.mail = email;
+        this.telefoonnummer = tel;
+        this.straat = straat;
+        this.huisnummer = huisnummer;
+        this.bus = bus;
+        this.postcode = postcode;
+        this.gemeente = gemeente;
     }
 
     public String getAuth_id() {

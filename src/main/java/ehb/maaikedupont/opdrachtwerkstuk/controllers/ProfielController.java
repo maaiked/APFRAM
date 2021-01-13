@@ -40,23 +40,10 @@ public class ProfielController {
 
         var princ = principal.getClaims();
         var auth_id = princ.get("sub").toString();
+        User nieuw = new User(auth_id, naam, voornaam, email, tel, straat, huisnummer, bus, postcode, gemeente);
+        userDAO.save(nieuw);
         Optional<User> nieuweUser = userDAO.findById(auth_id);
-        if (!nieuweUser.isPresent()) {
-            // TODO : validatie: alles moet ingevuld worden.
-            User nieuw = new User(auth_id);
-            nieuw.setFamilienaam(naam);
-            nieuw.setVoornaam(voornaam);
-            nieuw.setMail(email);
-            nieuw.setTelefoonnummer(tel);
-            nieuw.setStraat(straat);
-            nieuw.setHuisnummer(huisnummer);
-            nieuw.setBus(bus);
-            nieuw.setPostcode(postcode);
-            nieuw.setGemeente(gemeente);
-            userDAO.save(nieuw);
-            nieuweUser = userDAO.findById(auth_id);
-            map.addAttribute("userprofile", nieuweUser.get());
-        }
+        map.addAttribute("userprofile", nieuweUser.get());
         map.addAttribute("authprofile", principal.getClaims());
         return "profiel";
     }
@@ -64,13 +51,13 @@ public class ProfielController {
     @GetMapping({"/profiel"})
     public String getProfiel(ModelMap map, @AuthenticationPrincipal OidcUser principal) {
 
-        // get user in localdatabase op basis van ingelogde user...
-        // TODO: map attributen opruimen en profielpagina mooi maken :)
+        // get user op basis van ingelogde user...
         var princ = principal.getClaims();
         var id = princ.get("sub").toString();
         Optional<User> user = userDAO.findById(id);
         map.addAttribute("authprofile", principal.getClaims());
         map.addAttribute("sub", id);
+        // get user in localdb op basis van ingelogde user
         if (user.isPresent()) {
             map.addAttribute("userprofile", user.get());
         }

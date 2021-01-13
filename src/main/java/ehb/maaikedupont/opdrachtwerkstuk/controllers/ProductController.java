@@ -141,12 +141,6 @@ public class ProductController {
         var princ = principal.getClaims();
         var auth_id = princ.get("sub").toString();
         Optional<User> nieuweUser = userDAO.findById(auth_id);
-        if (!nieuweUser.isPresent()) {
-            // TODO : gegevens nieuwe user ophalen via form ofzo??
-            User nieuw = new User(auth_id);
-            userDAO.save(nieuw);
-            nieuweUser = userDAO.findById(auth_id);
-        }
         Double totaalprijs = 0.0;
         for (Product p : winkelwagen
         ) {
