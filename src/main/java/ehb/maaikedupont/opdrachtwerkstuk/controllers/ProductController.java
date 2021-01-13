@@ -96,8 +96,19 @@ public class ProductController {
 
     /* --- OPHALEN winkelwagenpagina ---  */
     @GetMapping({"/winkelwagen"})
-    public String getShoppingcart(ModelMap map){
+    public String getShoppingcart(ModelMap map, @AuthenticationPrincipal OidcUser principal){
         if (!winkelwagen.isEmpty()) {
+            if(principal !=null){
+                // user is ingelogd met AuthO
+                var princ = principal.getClaims();
+                var auth_id = princ.get("sub").toString();
+                Optional<User> nieuweUser = userDAO.findById(auth_id);
+                if (nieuweUser.isPresent())
+                {
+                    // user is geregistreerd in local db
+                    map.addAttribute("userprofile", nieuweUser.get());
+                }
+            }
             Double totaalprijs = 0.0;
             for (Product p : winkelwagen
             ) {
@@ -129,7 +140,6 @@ public class ProductController {
     public String postOrderbevestiging(HttpServletRequest request,
                                        @RequestParam("leveroptie") Boolean leveroptie,
                                        @AuthenticationPrincipal OidcUser principal){
-
 
         var princ = principal.getClaims();
         var auth_id = princ.get("sub").toString();

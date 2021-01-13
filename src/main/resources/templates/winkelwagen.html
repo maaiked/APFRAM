@@ -69,12 +69,22 @@
         </h6>
         <br>
 
-        <!-- FORM Leveringsopties -->
+    <!-- FORM Leveringsopties -->
+        <!-- SHOW login button als user nog niet ingelogd is -->
         <h1>Check-out</h1>
         <p sec:authorize="!isAuthenticated()" th:text="#{ww.login}">
             <!-- T: Log in om je bestelling af te ronden -->
         </p>
         <a sec:authorize="!isAuthenticated()" th:href="@{/oauth2/authorization/auth0}" id="qsLoginBtn" class="btn btn-primary btn-margin">Login</a>
+
+        <span sec:authorize="isAuthenticated()" th:unless="${userprofile} != null">
+            <p>Jouw profiel is nog niet compleet.
+                Gelieve alle gegevens aan te vullen, vooraleer je een bestelling kan plaatsen.</p>
+            <a href="/profiel" id="profiel" class="btn btn-primary btn-margin">Vul gegevens aan</a>
+
+        </span>
+        <span th:if="${userprofile} != null">
+        <!-- SHOW form als user wel is ingelogd en gekend is in localdb -->
         <form sec:authorize="isAuthenticated()" method="post" th:action="@{~/orderbevestiging}" >
             <p th:text="#{ww.leveropties}">
                 <!-- T: Leveroptie:  -->
@@ -99,6 +109,7 @@
                 <!-- T: Bevestig aankoop -->
             </button>
         </form>
+        </span>
     </span>
 
 </div>

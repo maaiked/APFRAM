@@ -8,6 +8,10 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @Controller
@@ -19,6 +23,44 @@ public class ProfielController {
     public ProfielController(UserDAO userDAO)
     {
         this.userDAO=userDAO;
+    }
+
+    @PostMapping({"/updateUser"})
+    public String postUpdateUser(HttpServletRequest request,
+                                 ModelMap map,
+                                 @RequestParam("naam") String naam,
+                                 @RequestParam("voornaam") String voornaam,
+                                 @RequestParam("email") String email,
+                                 @RequestParam("tel") String tel,
+                                 @RequestParam("straat") String straat,
+                                 @RequestParam("huisnummer") String huisnummer,
+                                 @RequestParam("bus") String bus,
+                                 @RequestParam("postcode") String postcode,
+                                 @RequestParam("gemeente") String gemeente,
+                                 @AuthenticationPrincipal OidcUser principal){
+
+        var princ = principal.getClaims();
+        var auth_id = princ.get("sub").toString();
+        Optional<User> nieuweUser = userDAO.findById(auth_id);
+        if (!nieuweUser.isPresent())
+        {
+            // TODO : validatie: alles moet ingevuld worden.
+            User nieuw = new User(auth_id);
+            nieuw.setFamilienaam(naam);
+            nieuw.setVoornaam(voornaam);
+            nieuw.setMail(email);
+            nieuw.setTelefoonnummer(tel);
+            nieuw.setStraat(straat);
+            nieuw.setHuisnummer(huisnummer);
+            nieuw.setBus(bus);
+            nieuw.setPostcode(postcode);
+            nieuw.setGemeente(gemeente);
+            userDAO.save(nieuw);
+            nieuweUser = userDAO.findById(auth_id);
+            map.addAttribute("userprofile", nieuweUser.get());
+        }
+        map.addAttribute("authprofile", principal.getClaims());
+        return "profiel";
     }
 
     @GetMapping({"/profiel"})
@@ -34,7 +76,6 @@ public class ProfielController {
         if (user.isPresent())
         {
            map.addAttribute("userprofile", user.get());
-           map.addAttribute("sub", id);
         }
         return "profiel";
     }
