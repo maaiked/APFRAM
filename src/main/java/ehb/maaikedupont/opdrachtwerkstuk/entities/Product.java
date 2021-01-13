@@ -11,24 +11,23 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotBlank(message="Naam mag niet leeg zijn")
+    @NotBlank(message = "Naam mag niet leeg zijn")
     private String naam;
-    @NotNull(message="Je moet een prijs opgeven")
+    @NotNull(message = "Je moet een prijs opgeven")
     private Double prijs;
     private Categorie categorie;
     private Dier dier;
     @Column(columnDefinition = "text")
     private String omschrijving;
 
-    public Product() {    }
+    public Product() {
+    }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public void setId(int id) {this.id = id;}
 
     public String getNaam() {
         return naam;

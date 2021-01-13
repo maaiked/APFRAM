@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th = "http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <title>Winkelwagen</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
 </head>
 <body>
 
@@ -21,13 +22,13 @@
     </h1>
     <br>
 
-<!-- SHOW ALS winkelwagen leeg is -->
-    <span th:unless="${cart} != null" th:text="#{ww.leeg}">
+    <!-- SHOW ALS winkelwagen leeg is -->
+    <span th:text="#{ww.leeg}" th:unless="${cart} != null">
         <!-- T: Je winkelwagen is leeg. -->
     </span>
     <br>
 
-<!-- SHOW ALS winkelwagen items bevat -->
+    <!-- SHOW ALS winkelwagen items bevat -->
     <!-- Winkelwagen items -->
     <span th:if="${cart} != null">
         <div class="row">
@@ -69,35 +70,41 @@
         </h6>
         <br>
 
-    <!-- FORM Leveringsopties -->
         <!-- SHOW login button als user nog niet ingelogd is -->
         <h1>Check-out</h1>
         <p sec:authorize="!isAuthenticated()" th:text="#{ww.login}">
             <!-- T: Log in om je bestelling af te ronden -->
         </p>
-        <a sec:authorize="!isAuthenticated()" th:href="@{/oauth2/authorization/auth0}" id="qsLoginBtn" class="btn btn-primary btn-margin">Login</a>
+        <a class="btn btn-primary btn-margin" id="qsLoginBtn" sec:authorize="!isAuthenticated()"
+           th:href="@{/oauth2/authorization/auth0}">Login</a>
 
+        <!-- SHOW melding dat profiel gegevens niet compleet zijn als user nog niet aangemaakt werd in local db -->
         <span sec:authorize="isAuthenticated()" th:unless="${userprofile} != null">
-            <p>Jouw profiel is nog niet compleet.
-                Gelieve alle gegevens aan te vullen, vooraleer je een bestelling kan plaatsen.</p>
-            <a href="/profiel" id="profiel" class="btn btn-primary btn-margin">Vul gegevens aan</a>
-
+            <p th:text="#{ww.vulgegevensaan}">
+                <!-- T: Jouw profiel is nog niet compleet.
+                Gelieve alle gegevens aan te vullen, vooraleer je een bestelling kan plaatsen. -->
+            </p>
+            <a class="btn btn-primary btn-margin" href="/profiel" id="profiel" th:text="#{ww.knopvulaan}">
+                <!-- T: Vul gegevens aan -->
+            </a>
         </span>
+
+    <!-- FORM Leveringsopties -->
         <span th:if="${userprofile} != null">
         <!-- SHOW form als user wel is ingelogd en gekend is in localdb -->
-        <form sec:authorize="isAuthenticated()" method="post" th:action="@{~/orderbevestiging}" >
+        <form method="post" sec:authorize="isAuthenticated()" th:action="@{~/orderbevestiging}">
             <p th:text="#{ww.leveropties}">
                 <!-- T: Leveroptie:  -->
             </p>
             <div class="form-group">
                 <div class="form-check">
-                  <input class="form-check-input" name="leveroptie" type="radio" id="winkel" value="false" checked>
+                  <input checked class="form-check-input" id="winkel" name="leveroptie" type="radio" value="false">
                   <label class="form-check-label" for="winkel" th:text="#{ww.ophalen}">
                       <!-- T: ophalen in de winkel -->
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" name="leveroptie" type="radio" id="thuis" value="true">
+                  <input class="form-check-input" id="thuis" name="leveroptie" type="radio" value="true">
                   <label class="form-check-label" for="thuis" th:text="#{ww.thuislevering}">
                       <!-- T: thuislevering -->
                   </label>
@@ -105,11 +112,12 @@
             </div>
 
             <!-- BUTTON bevestig -->
-            <button type="submit" class="btn btn-primary" th:text="#{ww.bevestig}">
+            <button class="btn btn-primary" th:text="#{ww.bevestig}" type="submit">
                 <!-- T: Bevestig aankoop -->
             </button>
         </form>
         </span>
+
     </span>
 
 </div>

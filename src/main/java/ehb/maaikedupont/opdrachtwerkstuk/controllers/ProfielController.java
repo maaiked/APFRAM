@@ -20,9 +20,8 @@ public class ProfielController {
     private final UserDAO userDAO;
 
     @Autowired
-    public ProfielController(UserDAO userDAO)
-    {
-        this.userDAO=userDAO;
+    public ProfielController(UserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 
     @PostMapping({"/updateUser"})
@@ -37,13 +36,12 @@ public class ProfielController {
                                  @RequestParam("bus") String bus,
                                  @RequestParam("postcode") String postcode,
                                  @RequestParam("gemeente") String gemeente,
-                                 @AuthenticationPrincipal OidcUser principal){
+                                 @AuthenticationPrincipal OidcUser principal) {
 
         var princ = principal.getClaims();
         var auth_id = princ.get("sub").toString();
         Optional<User> nieuweUser = userDAO.findById(auth_id);
-        if (!nieuweUser.isPresent())
-        {
+        if (!nieuweUser.isPresent()) {
             // TODO : validatie: alles moet ingevuld worden.
             User nieuw = new User(auth_id);
             nieuw.setFamilienaam(naam);
@@ -64,7 +62,7 @@ public class ProfielController {
     }
 
     @GetMapping({"/profiel"})
-    public String getProfiel(ModelMap map, @AuthenticationPrincipal OidcUser principal){
+    public String getProfiel(ModelMap map, @AuthenticationPrincipal OidcUser principal) {
 
         // get user in localdatabase op basis van ingelogde user...
         // TODO: map attributen opruimen en profielpagina mooi maken :)
@@ -73,9 +71,8 @@ public class ProfielController {
         Optional<User> user = userDAO.findById(id);
         map.addAttribute("authprofile", principal.getClaims());
         map.addAttribute("sub", id);
-        if (user.isPresent())
-        {
-           map.addAttribute("userprofile", user.get());
+        if (user.isPresent()) {
+            map.addAttribute("userprofile", user.get());
         }
         return "profiel";
     }

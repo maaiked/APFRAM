@@ -6,6 +6,7 @@ import java.util.List;
 
 @Entity
 public class User {
+
     @Id
     private String auth_id;
     private String familienaam;
@@ -19,14 +20,15 @@ public class User {
     private String telefoonnummer;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // een user kan meerdere bestellingen hebben
     private List<Bestelling> orders = new ArrayList<>();
 
-    public User(){
-    };
+    public User() {
+    }
 
-    public User(String auth_id){
+    public User(String auth_id) {
         this.auth_id = auth_id;
-    };
+    }
 
     public String getAuth_id() {
         return auth_id;

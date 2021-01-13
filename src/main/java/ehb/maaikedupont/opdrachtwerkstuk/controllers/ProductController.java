@@ -28,18 +28,17 @@ public class ProductController {
     private final UserDAO userDAO;
 
     // TODO : winkelwagen niet globaal aanmaken maar een attribuut maken van user of sessievariabele?
-    private  List<Product> winkelwagen = new ArrayList<Product>();
-    private Iterable<Product> productList ;
+    private List<Product> winkelwagen = new ArrayList<Product>();
+    private Iterable<Product> productList;
     private String filter;
     private Optional<User> user;
 
 
     @Autowired
-    public ProductController(UserDAO userDAO,ProductDAO productDAO, BestellingDAO bestellingDAO, OrderDetailDAO orderDetailDAO)
-    {
-        this.productDAO=productDAO;
-        this.bestellingDAO=bestellingDAO;
-        this.orderDetailDAO=orderDetailDAO;
+    public ProductController(UserDAO userDAO, ProductDAO productDAO, BestellingDAO bestellingDAO, OrderDetailDAO orderDetailDAO) {
+        this.productDAO = productDAO;
+        this.bestellingDAO = bestellingDAO;
+        this.orderDetailDAO = orderDetailDAO;
         this.userDAO = userDAO;
     }
 
@@ -53,11 +52,11 @@ public class ProductController {
         map.addAttribute("categories", Categorie.values());
     }
 
-/* --- INDEX ---  */
+    /* --- INDEX ---  */
     /* --- OPHALEN indexpagina ---  */
     @GetMapping({"/", "/home"})
-    public String getIndex(ModelMap map){
-        productList= productDAO.findAll();
+    public String getIndex(ModelMap map) {
+        productList = productDAO.findAll();
         filter = null;
         mapAll(map);
         return "index";
@@ -65,7 +64,7 @@ public class ProductController {
 
     /* --- OPHALEN indexpagina FILTER categorie ---  */
     @GetMapping({"/categorie/{filter}"})
-    public String getByCategories(@PathVariable("filter") Categorie categorie, ModelMap map){
+    public String getByCategories(@PathVariable("filter") Categorie categorie, ModelMap map) {
         productList = productDAO.findByCategorie(categorie);
         filter = categorie.toString();
         mapAll(map);
@@ -74,20 +73,19 @@ public class ProductController {
 
     /* --- OPHALEN indexpagina FILTER dier ---  */
     @GetMapping({"/dier/{filter}"})
-    public String getByDieren(@PathVariable("filter") Dier dier, ModelMap map){
+    public String getByDieren(@PathVariable("filter") Dier dier, ModelMap map) {
         productList = productDAO.findByDier(dier);
         filter = dier.toString();
         mapAll(map);
         return "index";
     }
 
-/* --- WINKELWAGEN ---  */
+    /* --- WINKELWAGEN ---  */
     /* --- TOEVOEGEN artikel aan Winkelwagen[] ---  */
     @GetMapping({"/winkelwagen/{id}"})
-    public String getAddToShoppingcart(@PathVariable("id") int id, ModelMap map){
+    public String getAddToShoppingcart(@PathVariable("id") int id, ModelMap map) {
         Optional<Product> product = productDAO.findById(id);
-        if (product.isPresent())
-        {
+        if (product.isPresent()) {
             winkelwagen.add(product.get());
         }
         mapAll(map);
@@ -96,15 +94,14 @@ public class ProductController {
 
     /* --- OPHALEN winkelwagenpagina ---  */
     @GetMapping({"/winkelwagen"})
-    public String getShoppingcart(ModelMap map, @AuthenticationPrincipal OidcUser principal){
+    public String getShoppingcart(ModelMap map, @AuthenticationPrincipal OidcUser principal) {
         if (!winkelwagen.isEmpty()) {
-            if(principal !=null){
+            if (principal != null) {
                 // user is ingelogd met AuthO
                 var princ = principal.getClaims();
                 var auth_id = princ.get("sub").toString();
                 Optional<User> nieuweUser = userDAO.findById(auth_id);
-                if (nieuweUser.isPresent())
-                {
+                if (nieuweUser.isPresent()) {
                     // user is geregistreerd in local db
                     map.addAttribute("userprofile", nieuweUser.get());
                 }
@@ -122,10 +119,10 @@ public class ProductController {
 
     /* --- VERWIJDEREN artikel van Winkelwagen[] ---  */
     @GetMapping({"/winkelwagen/delete/{id}"})
-    public String getDeleteShoppingcart(@PathVariable("id")int id, ModelMap map){
+    public String getDeleteShoppingcart(@PathVariable("id") int id, ModelMap map) {
         winkelwagen.remove(id);
         Double totaalprijs = 0.0;
-        for (Product p: winkelwagen
+        for (Product p : winkelwagen
         ) {
             totaalprijs += p.getPrijs();
         }
@@ -134,31 +131,30 @@ public class ProductController {
         return "winkelwagen";
     }
 
-/* --- ORDERBEVESTIGING ---  */
+    /* --- ORDERBEVESTIGING ---  */
     /* --- POSTEN bevestigen aankoop ---  */
     @PostMapping({"/orderbevestiging"})
     public String postOrderbevestiging(HttpServletRequest request,
                                        @RequestParam("leveroptie") Boolean leveroptie,
-                                       @AuthenticationPrincipal OidcUser principal){
+                                       @AuthenticationPrincipal OidcUser principal) {
 
         var princ = principal.getClaims();
         var auth_id = princ.get("sub").toString();
         Optional<User> nieuweUser = userDAO.findById(auth_id);
-        if (!nieuweUser.isPresent())
-        {
+        if (!nieuweUser.isPresent()) {
             // TODO : gegevens nieuwe user ophalen via form ofzo??
             User nieuw = new User(auth_id);
             userDAO.save(nieuw);
             nieuweUser = userDAO.findById(auth_id);
         }
         Double totaalprijs = 0.0;
-        for (Product p: winkelwagen
+        for (Product p : winkelwagen
         ) {
             totaalprijs += p.getPrijs();
         }
         Bestelling bestelling = new Bestelling(leveroptie, totaalprijs, nieuweUser.get());
         bestellingDAO.save(bestelling);
-        for (Product p: winkelwagen
+        for (Product p : winkelwagen
         ) {
             OrderDetail orderDetail = new OrderDetail(bestelling, p.getNaam(), p.getOmschrijving(), p.getPrijs());
             orderDetailDAO.save(orderDetail);
@@ -170,16 +166,16 @@ public class ProductController {
 
     /* --- OPHALEN orderbevestigingspagina ---  */
     @GetMapping({"/orderbevestiging"})
-    public String getOrderbevestiging(ModelMap map, HttpServletRequest request){
+    public String getOrderbevestiging(ModelMap map, HttpServletRequest request) {
         String bestelling = (String) request.getAttribute("bestelling");
         map.addAttribute("bestelling", bestelling);
         return "orderbevestiging";
     }
 
-/* --- NIEUW PRODUCT ---  */
+    /* --- NIEUW PRODUCT ---  */
     /* --- OPHALEN nieuwProductpagina ---  */
     @GetMapping({"/nieuwProduct"})
-    public String getNieuwProduct(ModelMap map){
+    public String getNieuwProduct(ModelMap map) {
         map.addAttribute("dieren", Dier.values());
         map.addAttribute("categories", Categorie.values());
         return "nieuwProduct";
@@ -187,19 +183,19 @@ public class ProductController {
 
     /* --- ATTRIBUUT die product entity aanmaakt om attributen naar te mappen ---  */
     @ModelAttribute("nieuwProduct")
-    public Product toSaveProduct(){
+    public Product toSaveProduct() {
         return new Product();
     }
 
     /* --- AANMAKEN nieuw product via formulierinput ---  */
     @PostMapping({"/nieuwProduct"})
     public String postNieuwProduct(@ModelAttribute("nieuwProduct") @Valid Product nieuwProduct,
-                            BindingResult bindingResult,
-                            ModelMap map){
-    if(bindingResult.hasErrors()){
-        return "/nieuwProduct";
-    }
+                                   BindingResult bindingResult,
+                                   ModelMap map) {
+        if (bindingResult.hasErrors()) {
+            return "/nieuwProduct";
+        }
         productDAO.save(nieuwProduct);
-    return "redirect:/home";
+        return "redirect:/home";
     }
 }

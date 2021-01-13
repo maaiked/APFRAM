@@ -9,6 +9,7 @@ public class OrderDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int detailid;
 
+    // een orderdetail behoort tot 1 order. Een order kan meerdere orderdetails (productlijnen) hebben.
     @ManyToOne
     @JoinColumn(name = "id", nullable = false)
     private Bestelling bestelling;
@@ -20,7 +21,8 @@ public class OrderDetail {
     private String omschrijving;
     private Double prijs;
 
-    public OrderDetail() {};
+    public OrderDetail() { }
+
     public OrderDetail(Bestelling bestelling, String naam, String omschrijving, Double prijs) {
         this.bestelling = bestelling;
         this.naam = naam;

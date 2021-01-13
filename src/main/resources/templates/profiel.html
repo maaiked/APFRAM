@@ -4,13 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-    <title>Profiel</title>
     <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+
+    <title>Profiel</title>
 
 </head>
 <body>
 
+<!-- nav bar -->
 <div th:insert="~{ navbar :: navbar }"></div>
 
 <div class="container" style="min-height: 100vh">
@@ -24,53 +26,62 @@
 
     <h2>Gegevens userdatabase:</h2>
 
-    <!--    User is nog niet gemaakt in de local db-->
+    <!--  SHOW formulier als User nog niet is aangemaakt in de local db-->
     <span th:unless="${userprofile} != null">
-        <h3>We missen nog enkele gegevens. Vul je profiel aan.</h3>
+        <h3 th:text="#{profiel.vulgegevensaan}"/>
+        <!--  T: Je profiel is nog niet volledig. Vul je gegevens aan. -->
 
         <form method="post" th:action="@{~/updateUser}">
                 <div class="form-group">
-                    <label for="naam" th:text="Familienaam"></label>
+                    <label for="naam" th:text="#{profiel.familienaam}"></label>
                     <input class="form-control" id="naam" name="naam" type="text">
                 </div>
                 <br>
+
                 <div class="form-group">
-                    <label for="voornaam" th:text="Voornaam"></label>
+                    <label for="voornaam" th:text="#{profiel.voornaam}"></label>
                     <input class="form-control" id="voornaam" name="voornaam" type="text">
                 </div>
                 <br>
+
                 <div class="form-group">
                     <label for="email" th:text="E-mail"></label>
                     <input class="form-control" id="email" name="email" type="text">
                 </div>
                 <br>
+
                 <div class="form-group">
-                    <label for="tel" th:text="Telefoonnummer"></label>
+                    <label for="tel" th:text="#{profiel.telefoonnummer}"></label>
                     <input class="form-control" id="tel" name="tel" type="text">
                 </div>
                 <br>
+
                 <div class="form-group">
-                    <label for="straat" th:text="Straat"></label>
+                    <label for="straat" th:text="#{profiel.straat}"></label>
                     <input class="form-control" id="straat" name="straat" type="text">
                 </div>
                 <br>
+
                 <div class="form-group">
-                    <label for="huisnummer" th:text="Huisnummer"></label>
+                    <label for="huisnummer" th:text="#{profiel.huisnummer}"></label>
                     <input class="form-control" id="huisnummer" name="huisnummer" type="text">
                 </div>
                 <br>
+
                 <div class="form-group">
-                    <label for="bus" th:text="Bus"></label>
+                    <label for="bus" th:text="#{profiel.bus}"></label>
                     <input class="form-control" id="bus" name="bus" type="text">
                 </div>
                 <br>
+
                 <div class="form-group">
-                    <label for="postcode" th:text="Postcode"></label>
+                    <label for="postcode" th:text="#{profiel.postcode}"></label>
                     <input class="form-control" id="postcode" name="postcode" type="text">
                 </div>
                 <br>
+
                 <div class="form-group">
-                    <label for="gemeente" th:text="Gemeente"></label>
+                    <label for="gemeente" th:text="#{profiel.gemeente}"></label>
                     <input class="form-control" id="gemeente" name="gemeente" type="text">
                 </div>
                 <br>
@@ -80,23 +91,31 @@
                 <!-- T: Opslaan -->
             </button>
         </form>
-
     </span>
 
-    <!--    User is al gemaakt in de local db-->
+    <!--   SHOW als User al is aangemaakt in de local db-->
     <span th:if="${userprofile} != null">
         <p th:text="'Auth_id : '+${userprofile.auth_id}"></p>
-        <p th:text="'Familienaam : '+${userprofile.familienaam}"></p>
-        <p th:text="'Straat : '+${userprofile.straat}"></p>
-        <p th:text="'Gemeente : '+${userprofile.gemeente}"></p>
-        <h2 th:text="#{profiel.bestellingen}"></h2>
+        <p th:text="#{profiel.familienaam}+' : '+${userprofile.familienaam}"></p>
+        <p th:text="#{profiel.voornaam}+' : '+${userprofile.voornaam}"></p>
+        <p th:text="'Email : '+${userprofile.mail}"></p>
+        <p th:text="#{profiel.telefoonnummer}+' : '+${userprofile.telefoonnummer}"></p>
+        <p th:text="#{profiel.straat}+' : '+${userprofile.straat}"></p>
+        <p th:text="#{profiel.huisnummer}+' : '+${userprofile.huisnummer}"></p>
+        <p th:text="#{profiel.bus}+' : '+${userprofile.bus}"></p>
+        <p th:text="#{profiel.postcode}+' : '+${userprofile.postcode}"></p>
+        <p th:text="#{profiel.gemeente}+' : '+${userprofile.gemeente}"></p>
 
+        <h2 th:text="#{profiel.bestellingen}"><!--  T: Bestellingen --></h2>
+
+        <!-- Maak voor elke bestelling een card aan -->
         <div style="margin-bottom: 5px" th:each="orders: ${userprofile.orders}">
             <div class="card">
                 <div class="card-header"
-                     th:text="'Bestelling referentie '+${orders.id}+ #{profiel.totaal}+${#numbers.formatDecimal(orders.totaalbedrag, 1, 2)}">
+                     th:text="#{profiel.besteldetail}+' : '+${orders.id}+ #{profiel.totaal}+${#numbers.formatDecimal(orders.totaalbedrag, 1, 2)}">
                 </div>
                 <div class="card-body">
+                    <!-- Maak voor elk orderdetail in de bestelling een textrij aan -->
                     <p class="card-text" th:each="detail: ${orders.orderDetails}"
                        th:text="${detail.naam}+' ~ € '+${detail.prijs}"></p>
                 </div>
@@ -104,7 +123,6 @@
                     <small class="text-muted"
                            th:text="#{profiel.besteldop}+${#temporals.format(orders.datumAangemaakt, 'dd-MM-yyyy')}+ #{profiel.leveroptie}+(${orders.levering}? #{profiel.thuislevering} : #{profiel.ophalenwinkel})"></small>
                 </div>
-
             </div>
         </div>
     </span>

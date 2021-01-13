@@ -16,17 +16,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-       http.authorizeRequests()
-               // allow all users to access the home page
-               .mvcMatchers("/", "/winkelwagen", "/winkelwagen/*", "/winkelwagen/delete/*", "/categorie/*", "/dier/*", "/home").permitAll()
-               // all other requests must be authenticated
-               .anyRequest().authenticated()
-           .and().oauth2Login()
-           .and().logout()
-               // handle logout requests at /logout path
-               .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-               // customize logout handler to log out of Auth0
-               .addLogoutHandler(logoutHandler);
+        http.authorizeRequests()
+                // allow all users to access the home page and shopping cart without begin logged in
+                .mvcMatchers("/", "/winkelwagen", "/winkelwagen/*", "/winkelwagen/delete/*", "/categorie/*", "/dier/*", "/home").permitAll()
+                // all other requests must be authenticated
+                .anyRequest().authenticated()
+                .and().oauth2Login()
+                .and().logout()
+                // handle logout requests at /logout path
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                // customize logout handler to log out of Auth0
+                .addLogoutHandler(logoutHandler);
     }
 
 // If using HS256, create a Bean to specify the HS256 should be used. By default, RS256 will be used.

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th = "http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <title>Dierenshop</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
 
 </head>
 <body>
@@ -21,42 +23,50 @@
     </h1>
     <hr>
 
-<!-- FILTER KNOPPEN -->
+    <!-- FILTER KNOPPEN -->
     <p th:text="#{indexpagina.filtertekst}">
         <!-- T: Bekijk enkel de producten voor:  -->
     </p>
 
     <!-- Categorie knoppen -->
+        <!--  Voor elke categorie, maak een knop aan met th:each -->
     <a class="btn btn-outline-secondary" th:each="categorie: ${categories}" th:href="'/categorie/'+${categorie}"
        th:text="${categorie}">
     </a>
     <!-- Dier knoppen -->
-    <a class="btn btn-outline-secondary" th:each="dier: ${dieren}" th:href="'/dier/'+${dier}" th:text="${dier}">
+        <!-- Voor elk dier, maak een knop aan met th:each -->
+    <a class="btn btn-outline-secondary" th:each="dier: ${dieren}" th:href="'/dier/'+${dier}"
+       th:text="${dier}">
     </a>
-    <a class="btn btn-outline-success" href="/home" th:text="#{indexpagina.alles}"></a>
+    <!-- knop toon alles -->
+    <a class="btn btn-outline-success" href="/home"
+       th:text="#{indexpagina.alles}">
+    </a>
     <br>
-<!-- WINKELWAGEN KNOP -->
-    <a class="button" href="/winkelwagen" th:text="#{indexpagina.winkelwagen}">
-        <!-- T: Winkelwagen -->
-    </a>
 
     <h5 th:text="${filter} ? #{indexpagina.filtered} +${filter} : ''">
         <!-- T: Gefilterd op: filter -->
     </h5>
 
-<!-- ARTIKELEN -->
+    <!-- ARTIKELEN -->
     <div class="row">
         <!-- Voor elk product: maak div met card aan -->
         <div class="col-4" style="margin-bottom: 5px" th:each="product: ${all}">
             <div class="card">
-                <div class="card-header" th:text="${product.naam}+' ~ €'+${product.prijs}">
+                <div class="card-header"
+                    th:text="${product.naam}+' ~ €'+${product.prijs}">
                 </div>
                 <div class="card-body">
                     <p class="card-text" th:text="${product.omschrijving}"></p>
-                    <a th:href="'/winkelwagen/'+${product.id}" class="btn btn-outline-primary" th:text="#{indexpagina.toevoegenwinkelwagen}"></a>
+                    <!-- Knop om product toe te voegen aan winkelwagen -->
+                    <a class="btn btn-outline-primary" th:href="'/winkelwagen/'+${product.id}"
+                       th:text="#{indexpagina.toevoegenwinkelwagen}">
+                    </a>
                 </div>
                 <div class="card-footer">
-                    <small class="text-muted" th:text="'DIER: '+${product.dier}+' - CATEGORIE: '+${product.categorie} "></small>
+                    <small class="text-muted"
+                           th:text="'DIER: '+${product.dier}+' - CATEGORIE: '+${product.categorie} ">
+                    </small>
                 </div>
             </div>
         </div>
@@ -65,7 +75,6 @@
 
 <!-- FOOTER -->
 <div th:insert="~{ footer :: footer }"></div>
-
 
 </body>
 </html>

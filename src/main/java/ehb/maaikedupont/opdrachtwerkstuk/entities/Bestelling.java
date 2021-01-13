@@ -11,10 +11,12 @@ public class Bestelling {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    // een bestelling behoort toe aan 1 user
     @ManyToOne
     @JoinColumn(name = "auth_id", nullable = false)
     private User user;
 
+    // een bestelling kan meerdere orderdetails hebbens ( productlijnen )
     @OneToMany(mappedBy = "bestelling", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
@@ -22,7 +24,7 @@ public class Bestelling {
     private Boolean levering;
     private Double totaalbedrag;
 
-    public Bestelling() {    }
+    public Bestelling() { }
 
     public Bestelling(Boolean levering, Double totaalbedrag, User user) {
         this.datumAangemaakt = LocalDateTime.now();
