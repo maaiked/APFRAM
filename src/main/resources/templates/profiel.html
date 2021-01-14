@@ -36,55 +36,46 @@
                     <label for="naam" th:text="#{profiel.familienaam}"></label>
                     <input class="form-control" id="naam" name="naam" type="text" required>
                 </div>
-                <br>
 
                 <div class="form-group">
                     <label for="voornaam" th:text="#{profiel.voornaam}"></label>
                     <input class="form-control" id="voornaam" name="voornaam" type="text" required>
                 </div>
-                <br>
 
                 <div class="form-group">
                     <label for="email" th:text="E-mail"></label>
                     <input class="form-control" id="email" name="email" type="email" required>
                 </div>
-                <br>
 
                 <div class="form-group">
                     <label for="tel" th:text="#{profiel.telefoonnummer}"></label>
                     <input class="form-control" id="tel" name="tel" type="text" required>
                 </div>
-                <br>
 
                 <div class="form-group">
                     <label for="straat" th:text="#{profiel.straat}"></label>
                     <input class="form-control" id="straat" name="straat" type="text" required>
                 </div>
-                <br>
 
                 <div class="form-group">
                     <label for="huisnummer" th:text="#{profiel.huisnummer}"></label>
                     <input class="form-control" id="huisnummer" name="huisnummer" type="text" required>
                 </div>
-                <br>
 
                 <div class="form-group">
                     <label for="bus" th:text="#{profiel.bus}"></label>
                     <input class="form-control" id="bus" name="bus" type="text">
                 </div>
-                <br>
 
                 <div class="form-group">
                     <label for="postcode" th:text="#{profiel.postcode}"></label>
                     <input class="form-control" id="postcode" name="postcode" type="text" required>
                 </div>
-                <br>
 
                 <div class="form-group">
                     <label for="gemeente" th:text="#{profiel.gemeente}"></label>
                     <input class="form-control" id="gemeente" name="gemeente" type="text" required>
                 </div>
-                <br>
 
             <!-- BUTTON bevestig -->
             <button class="btn btn-primary" th:text="#{profiel.opslaan}" type="submit">
@@ -127,7 +118,7 @@
         </div>
     </span>
 </div>
-
+<br>
 <!-- FOOTER -->
 <div th:insert="~{ footer :: footer }"></div>
 </body>
