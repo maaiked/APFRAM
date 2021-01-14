@@ -47,6 +47,13 @@
     <h5 th:text="${filter} ? #{indexpagina.filtered} +${filter} : ''">
         <!-- T: Gefilterd op: filter -->
     </h5>
+    <br>
+
+    <!-- Als een product werd toegevoegd aan winkelwagen, toon deze alert -->
+    <div class="alert alert-success" role="alert"
+         th:if="${message} != null" th:text="${message}+#{index.toegevoegd}">
+        <!-- T: Product werd toegevoegd aan je winkelwagen -->
+    </div>
 
     <!-- ARTIKELEN -->
     <div class="row">

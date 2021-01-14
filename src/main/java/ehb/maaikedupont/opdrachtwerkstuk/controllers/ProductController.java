@@ -86,6 +86,7 @@ public class ProductController {
         Optional<Product> product = productDAO.findById(id);
         if (product.isPresent()) {
             winkelwagen.add(product.get());
+            map.addAttribute("message", product.get().getNaam());
         }
         mapAll(map);
         return "index";
@@ -197,8 +198,7 @@ public class ProductController {
     /* --- AANMAKEN nieuw product via formulierinput ---  */
     @PostMapping({"/nieuwProduct"})
     public String postNieuwProduct(@ModelAttribute("nieuwProduct") @Valid Product nieuwProduct,
-                                   BindingResult bindingResult,
-                                   ModelMap map) {
+                                   BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "/nieuwProduct";
         }
