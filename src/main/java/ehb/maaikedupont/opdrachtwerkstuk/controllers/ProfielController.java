@@ -24,6 +24,8 @@ public class ProfielController {
         this.userDAO = userDAO;
     }
 
+    // verwerkt het formulier op de profiel pagina, die getoont wordt wanneer de user is ingelogd
+    // maar nog niet gekend is in de local db ( nodig voor de adresgegevens etc )
     @PostMapping({"/updateUser"})
     public String postUpdateUser(HttpServletRequest request,
                                  ModelMap map,
@@ -38,29 +40,36 @@ public class ProfielController {
                                  @RequestParam("gemeente") String gemeente,
                                  @AuthenticationPrincipal OidcUser principal) {
 
+        // haalt de auth0 gegevens van de ingelogde user op om de id in authO ook te gebruiken als id in de localdb
         var princ = principal.getClaims();
         var auth_id = princ.get("sub").toString();
         User nieuw = new User(auth_id, naam, voornaam, email, tel, straat, huisnummer, bus, postcode, gemeente);
         userDAO.save(nieuw);
+
+        // haal de gegevens op om weer te geven op de profielview
         Optional<User> nieuweUser = userDAO.findById(auth_id);
         map.addAttribute("userprofile", nieuweUser.get());
         map.addAttribute("authprofile", principal.getClaims());
+
         return "profiel";
     }
+
 
     @GetMapping({"/profiel"})
     public String getProfiel(ModelMap map, @AuthenticationPrincipal OidcUser principal) {
 
-        // get user op basis van ingelogde user...
+        // get auth0 gegevens op basis van ingelogde user
         var princ = principal.getClaims();
         var id = princ.get("sub").toString();
-        Optional<User> user = userDAO.findById(id);
         map.addAttribute("authprofile", principal.getClaims());
         map.addAttribute("sub", id);
-        // get user in localdb op basis van ingelogde user
+
+        // als user ook in localdb al bestaat, haal ook deze gegevens op
+        Optional<User> user = userDAO.findById(id);
         if (user.isPresent()) {
             map.addAttribute("userprofile", user.get());
         }
+
         return "profiel";
     }
 }
